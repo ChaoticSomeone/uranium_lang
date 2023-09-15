@@ -1,34 +1,55 @@
 import re
 
 class Parser:
+    keywords = {}
+    arithmetics = {}
     tokenTypes = {}
-    code = ""
-    tokens = []
+    braceLikes = {}
+
+    ids = []
     tokenMetaData = []
+    tokens = []
+
+    code = ""
+    filepath = ""
+
     idx = 0
     oldIdx = 0
-    ids = []
 
     @staticmethod
     def initParser():
         enumTT = enumerate([
             "UNKNOWN_TOKEN",
-            "DT_INT",
+            "KW_INT",
+            "KW_RETURN",
             "REQ_FUNC_MAIN",
             "IDENTIFIER",
+            "INT_LIT",
             "L_PAREN",
             "R_PAREN",
             "L_BRACE",
             "R_BRACE",
-            "RETURN",
-            "INT_LIT",
+            "PLUS",
+            "MINUS",
+            "ASTERISK",
+            "SLASH",
+            "PERCENT",
             "NEWLINE"
         ])
+        
         for i, TT in enumTT:
             Parser.tokenTypes[TT] = i
+            if re.search("^KW_", TT) is not None:
+                Parser.keywords[TT] = i
+            if TT in ["PLUS", "MINUS", "ASTERISK", "SLASH", "PERCENT"]:
+                Parser.arithmetics[TT] = i
+            if TT in ["L_PAREN", "R_PAREN", "L_BRACE", "R_BRACE"]:
+                Parser.braceLikes[TT] = i
+
 
     @staticmethod
     def readUraniumFile(filepath:str="uranium/main.uran") -> str:
+        Parser.filepath = filepath
         Parser.initParser()
         with open(filepath, "r") as f:
             lines = f.readlines()
@@ -40,8 +61,8 @@ class Parser:
         while Parser.idx < len(Parser.code):
             c = Parser.advance()
 
-            if re.search("^int", Parser.code[Parser.idx-1:]) and Parser.peek(2).isspace():
-                Parser.tokens.append(Parser.tokenTypes["DT_INT"])
+            if re.search("^int(\s+)", Parser.code[Parser.idx-1:]) and Parser.peek(2).isspace():
+                Parser.tokens.append(Parser.tokenTypes["KW_INT"])
                 Parser.idx += 2
                 Parser.tokenMetaData.append(None)
 
@@ -52,8 +73,8 @@ class Parser:
                 Parser.idx += 3
                 Parser.tokenMetaData.append(None)
 
-            elif re.search("^return", Parser.code[Parser.idx-1:]):
-                Parser.tokens.append(Parser.tokenTypes["RETURN"])
+            elif re.search("^return(\s+)", Parser.code[Parser.idx-1:]):
+                Parser.tokens.append(Parser.tokenTypes["KW_RETURN"])
                 Parser.idx += 5
                 Parser.tokenMetaData.append(None)
 
@@ -79,6 +100,26 @@ class Parser:
 
             elif c.isspace():
                 continue
+
+            elif re.search("^\+", Parser.code[Parser.idx-1:]):
+                Parser.tokens.append(Parser.tokenTypes["PLUS"])
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^-", Parser.code[Parser.idx-1:]):
+                Parser.tokens.append(Parser.tokenTypes["MINUS"])
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^\*", Parser.code[Parser.idx - 1:]):
+                Parser.tokens.append(Parser.tokenTypes["ASTERISK"])
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^/", Parser.code[Parser.idx - 1:]):
+                Parser.tokens.append(Parser.tokenTypes["SLASH"])
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^%", Parser.code[Parser.idx - 1:]):
+                Parser.tokens.append(Parser.tokenTypes["PERCENT"])
+                Parser.tokenMetaData.append(None)
 
             elif num := re.search("^\d+", Parser.code[Parser.idx-1:]):
                 if num is not None and num.group().isdecimal():
