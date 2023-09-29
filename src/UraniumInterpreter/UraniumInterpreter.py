@@ -21,8 +21,11 @@ class Interpreter:
                 if token == Parser.tokenTypes["KW_INT"]:
                     Interpreter.cppCode.append("int")
 
-                elif token == Parser.tokenTypes["REQ_FUNC_MAIN"]:
-                    Interpreter.cppCode.append("main")
+                elif token == Parser.tokenTypes["KW_FLOAT"]:
+                    Interpreter.cppCode.append("float")
+
+                elif token == Parser.tokenTypes["KW_CHAR"]:
+                    Interpreter.cppCode.append("char")
 
                 elif token == Parser.tokenTypes["L_PAREN"]:
                     Interpreter.cppCode.append("(")
@@ -48,6 +51,12 @@ class Interpreter:
                 elif token == Parser.tokenTypes["INT_LIT"]:
                     Interpreter.cppCode.append(f"{Lexer.metadataGroups[i][j][0]}")
 
+                elif token == Parser.tokenTypes["FLOAT_LIT"]:
+                    Interpreter.cppCode.append(f"{Lexer.metadataGroups[i][j][0]}")
+
+                elif token == Parser.tokenTypes["CHAR_LIT"]:
+                    Interpreter.cppCode.append(f"{Lexer.metadataGroups[i][j][0]}")
+
                 elif token == Parser.tokenTypes["PLUS"]:
                     Interpreter.cppCode.append(f"+")
 
@@ -62,6 +71,12 @@ class Interpreter:
 
                 elif token == Parser.tokenTypes["PERCENT"]:
                     Interpreter.cppCode.append(f"%")
+
+                elif token == Parser.tokenTypes["EQUALS"]:
+                    Interpreter.cppCode.append(f"=")
+
+                elif token == Parser.tokenTypes["IDENTIFIER"]:
+                    Interpreter.cppCode.append(f"{Lexer.metadataGroups[i][j][0]}")
 
             i += 1
 

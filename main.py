@@ -1,9 +1,10 @@
-from src.UraniumParser import Parser
-from src.UraniumLexer import Lexer
 from src.UraniumInterpreter import Interpreter
 
+"""
+ToDo:
+- Escape Sequence detection for char datatype
+- Fix size specifiers / work on implementation
+"""
+
 if __name__ == '__main__':
-    Parser.readUraniumFile()
-    Parser.tokenize()
-    Parser.showTokens()
-    Lexer.groupTokens()
+    Interpreter.compile(keepCpp=True)
