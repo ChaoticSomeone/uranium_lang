@@ -26,6 +26,9 @@ class Parser:
             "KW_FLOAT",
             "KW_CHAR",
             "KW_RETURN",
+            "KW_BOOL",
+            "KW_TRUE",
+            "KW_FALSE",
 
             "IDENTIFIER",
             "INT_LIT",
@@ -38,12 +41,14 @@ class Parser:
             "R_BRACE",
             "L_ANGLE",
             "R_ANGLE",
+
             "PLUS",
             "MINUS",
             "ASTERISK",
             "SLASH",
             "PERCENT",
             "EQUALS",
+            "ELLIPSIS",
             "NEWLINE"
         ])
 
@@ -88,9 +93,29 @@ class Parser:
                 Parser.idx += 4
                 Parser.tokenMetaData.append(None)
 
+            elif re.search("^bool(\s+)", Parser.code[Parser.idx:]):
+                Parser.tokens.append(Parser.tokenTypes["KW_BOOL"])
+                Parser.idx += 4
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^true(\s+)", Parser.code[Parser.idx:]):
+                Parser.tokens.append(Parser.tokenTypes["KW_TRUE"])
+                Parser.idx += 4
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^false(\s+)", Parser.code[Parser.idx:]):
+                Parser.tokens.append(Parser.tokenTypes["KW_FALSE"])
+                Parser.idx += 5
+                Parser.tokenMetaData.append(None)
+
             elif re.search("^return(\s+)", Parser.code[Parser.idx:]):
                 Parser.tokens.append(Parser.tokenTypes["KW_RETURN"])
                 Parser.idx += 6
+                Parser.tokenMetaData.append(None)
+
+            elif re.search("^\.\.\.", Parser.code[Parser.idx:]):
+                Parser.tokens.append(Parser.tokenTypes["ELLIPSIS"])
+                Parser.idx += 3
                 Parser.tokenMetaData.append(None)
 
             elif c == "(":

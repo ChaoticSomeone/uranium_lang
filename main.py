@@ -3,7 +3,7 @@ from src.UraniumInterpreter import Interpreter
 """
 ToDo:
 - Escape Sequence detection for char datatype
-- Fix size specifiers / work on implementation
+- Allow unspecified size for int/float
 """
 
 if __name__ == '__main__':

@@ -9,8 +9,8 @@ class Interpreter:
     def parseAndLex():
         Parser.readUraniumFile()
         Parser.tokenize()
-        Parser.showTokens()
         Lexer.groupTokens()
+        Parser.showTokens()
 
     @staticmethod
     def translate():
@@ -18,14 +18,36 @@ class Interpreter:
         while i < len(Lexer.tokenGroups):
             group = Lexer.tokenGroups[i]
             for j, token in enumerate(group):
+
                 if token == Parser.tokenTypes["KW_INT"]:
-                    Interpreter.cppCode.append("int")
+                    if Lexer.metadataGroups[i][j] is not None:
+                        sz = Lexer.metadataGroups[i][j][0]
+                        if sz == 1: Interpreter.cppCode.append("byte")
+                        if sz == 2: Interpreter.cppCode.append("short")
+                        if sz == 4: Interpreter.cppCode.append("int")
+                        if sz == 8: Interpreter.cppCode.append("long")
+                        if sz == 16: Interpreter.cppCode.append("long long")
+                    else: Interpreter.cppCode.append("int")
 
                 elif token == Parser.tokenTypes["KW_FLOAT"]:
-                    Interpreter.cppCode.append("float")
+                    if Lexer.metadataGroups[i][j] is not None:
+                        sz = Lexer.metadataGroups[i][j][0]
+                        if sz == 4: Interpreter.cppCode.append("float")
+                        if sz == 8: Interpreter.cppCode.append("double")
+                        if sz == 16: Interpreter.cppCode.append("long double")
+                    else: Interpreter.cppCode.append("float")
 
                 elif token == Parser.tokenTypes["KW_CHAR"]:
                     Interpreter.cppCode.append("char")
+
+                elif token == Parser.tokenTypes["KW_BOOL"]:
+                    Interpreter.cppCode.append("bool")
+
+                elif token == Parser.tokenTypes["KW_TRUE"]:
+                    Interpreter.cppCode.append("true")
+
+                elif token == Parser.tokenTypes["KW_FALSE"]:
+                    Interpreter.cppCode.append("false")
 
                 elif token == Parser.tokenTypes["L_PAREN"]:
                     Interpreter.cppCode.append("(")
