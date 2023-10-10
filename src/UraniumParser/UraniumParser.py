@@ -6,6 +6,7 @@ class Parser:
     tokenTypes = {}
     braceLikes = {}
     literals = {}
+    comparisons = {}
 
     ids = []
     tokenMetaData = []
@@ -42,6 +43,11 @@ class Parser:
             "L_ANGLE",
             "R_ANGLE",
 
+            "COMP_EQ",
+            "COMP_LE",
+            "COMP_GE",
+            "COMP_NE",
+
             "PLUS",
             "MINUS",
             "ASTERISK",
@@ -62,6 +68,8 @@ class Parser:
                 Parser.braceLikes[TT] = i
             if re.search("_LIT$", TT) is not None:
                 Parser.literals[TT] = i
+            if re.search("^COMP_", TT) is not None:
+                Parser.comparisons[TT] = i
 
 
     @staticmethod
@@ -75,8 +83,19 @@ class Parser:
 
     @staticmethod
     def tokenize():
+        isMultiLineCom:bool = False
         while Parser.idx < len(Parser.code):
             c = Parser.code[Parser.idx]
+
+            # Isolate the tokenizing process while in a multi-line comment
+            if isMultiLineCom:
+                if (com := re.search("^\*/\s*\n", Parser.code[Parser.idx:])) is not None:
+                    isMultiLineCom = False
+                    Parser.idx += len(com.group())
+                else:
+                    Parser.idx += 1
+                continue
+
 
             if re.search("^int(\s+|<)", Parser.code[Parser.idx:]):
                 Parser.tokens.append(Parser.tokenTypes["KW_INT"])
@@ -118,6 +137,15 @@ class Parser:
                 Parser.idx += 3
                 Parser.tokenMetaData.append(None)
 
+            elif com := re.search("^//[^\n]*\n", Parser.code[Parser.idx:]):
+                if com is not None: Parser.idx += len(com.group())
+
+            elif com := re.search("^/\*", Parser.code[Parser.idx:]):
+                if com is not None:
+                    Parser.idx += 2
+                    isMultiLineCom = True
+                    continue
+
             elif c == "(":
                 Parser.tokens.append(Parser.tokenTypes["L_PAREN"])
                 Parser.idx += 1
@@ -139,13 +167,21 @@ class Parser:
                 Parser.tokenMetaData.append(None)
 
             elif c == "<":
-                Parser.tokens.append(Parser.tokenTypes["L_ANGLE"])
-                Parser.idx += 1
+                if Parser.code[Parser.idx+1] == "=":
+                    Parser.tokens.append(Parser.tokenTypes["COMP_LE"])
+                    Parser.idx += 2
+                else:
+                    Parser.tokens.append(Parser.tokenTypes["L_ANGLE"])
+                    Parser.idx += 1
                 Parser.tokenMetaData.append(None)
 
             elif c == ">":
-                Parser.tokens.append(Parser.tokenTypes["R_ANGLE"])
-                Parser.idx += 1
+                if Parser.code[Parser.idx + 1] == "=":
+                    Parser.tokens.append(Parser.tokenTypes["COMP_GE"])
+                    Parser.idx += 2
+                else:
+                    Parser.tokens.append(Parser.tokenTypes["R_ANGLE"])
+                    Parser.idx += 1
                 Parser.tokenMetaData.append(None)
 
             elif c == "\n":
@@ -183,8 +219,12 @@ class Parser:
                 Parser.tokenMetaData.append(None)
 
             elif re.search("^=", Parser.code[Parser.idx:]):
-                Parser.tokens.append(Parser.tokenTypes["EQUALS"])
-                Parser.idx += 1
+                if Parser.code[Parser.idx+1] == "=":
+                    Parser.tokens.append(Parser.tokenTypes["COMP_EQ"])
+                    Parser.idx += 2
+                else:
+                    Parser.tokens.append(Parser.tokenTypes["EQUALS"])
+                    Parser.idx += 1
                 Parser.tokenMetaData.append(None)
 
             elif num := re.search("^\d+\.\d+", Parser.code[Parser.idx:]):

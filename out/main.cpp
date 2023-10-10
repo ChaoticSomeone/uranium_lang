@@ -1,5 +1,4 @@
  int main ( ) {
- bool a = 5;
- float f = 10.2 + 3 - 2;
+ bool a = 3 > 2;
  return a;
  }

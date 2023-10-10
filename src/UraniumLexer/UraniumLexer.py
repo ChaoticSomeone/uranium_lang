@@ -72,12 +72,12 @@ class Lexer:
 
             # check if 'true' keyword is used correctly
             if token == Parser.tokenTypes["KW_TRUE"]:
-                if Parser.tokens[i + 1] not in [Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] not in [Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["ELLIPSIS"], Parser.tokenTypes["COMP_EQ"]]:
                     UraniumError("SyntaxError", "Unexpected Token at keyword true!")
 
             # check if 'false' keyword is used correctly
             if token == Parser.tokenTypes["KW_FALSE"]:
-                if Parser.tokens[i + 1] not in [Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] not in [Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["ELLIPSIS"], Parser.tokenTypes["COMP_EQ"]]:
                     UraniumError("SyntaxError", "Unexpected Token at keyword false!")
 
             # check if 'return' keyword is used correctly
@@ -88,7 +88,7 @@ class Lexer:
 
             # check if integer literals are used correctly
             if token == Parser.tokenTypes["INT_LIT"]:
-                if Parser.tokens[i + 1] in [Parser.tokenTypes["NEWLINE"], *Parser.arithmetics.values(), Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] in [Parser.tokenTypes["NEWLINE"], *Parser.arithmetics.values(), Parser.tokenTypes["ELLIPSIS"], *Parser.comparisons.values(), Parser.tokenTypes["L_ANGLE"], Parser.tokenTypes["R_ANGLE"]]:
                     i += 1
                     continue
                 else:
@@ -96,7 +96,7 @@ class Lexer:
 
             # check if float literals are used correctly
             if token == Parser.tokenTypes["FLOAT_LIT"]:
-                if Parser.tokens[i + 1] in [Parser.tokenTypes["NEWLINE"], *Parser.arithmetics.values(), Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] in [Parser.tokenTypes["NEWLINE"], *Parser.arithmetics.values(), Parser.tokenTypes["ELLIPSIS"], *Parser.comparisons.values(), Parser.tokenTypes["L_ANGLE"], Parser.tokenTypes["R_ANGLE"]]:
                     i += 1
                     continue
                 else:
@@ -104,7 +104,7 @@ class Lexer:
 
             # check if char literals are used correctly
             if token == Parser.tokenTypes["CHAR_LIT"]:
-                if Parser.tokens[i + 1] in [Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] in [Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["ELLIPSIS"], *Parser.comparisons.values(), Parser.tokenTypes["L_ANGLE"], Parser.tokenTypes["R_ANGLE"]]:
                     i += 1
                     continue
                 else:
@@ -152,15 +152,40 @@ class Lexer:
 
             # check if equals sign is used correctly
             if token == Parser.tokenTypes["EQUALS"]:
-                if Parser.tokens[i + 1] in [*Parser.literals.values(), Parser.tokenTypes["MINUS"], Parser.tokenTypes["PLUS"], Parser.tokenTypes["KW_TRUE"], Parser.tokenTypes["KW_FALSE"], Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] in [*Parser.literals.values(), Parser.tokenTypes["MINUS"], Parser.tokenTypes["PLUS"], Parser.tokenTypes["KW_TRUE"], Parser.tokenTypes["KW_FALSE"], Parser.tokenTypes["IDENTIFIER"], Parser.tokenTypes["ELLIPSIS"]]:
                     i += 1
                     continue
                 else:
                     UraniumError("SyntaxError", f"Unexpected token at equals sign!")
 
+            # check if == is used correctly
+            if token == Parser.tokenTypes["COMP_EQ"]:
+                if not Parser.tokens[i+1] in [*Parser.literals.values(), Parser.tokenTypes["IDENTIFIER"]]:
+                    UraniumError("SyntaxError", f"Unexpected token at equality comparison!")
+
+            # check if <= is used correctly
+            if token == Parser.tokenTypes["COMP_LE"]:
+                if not Parser.tokens[i + 1] in [*Parser.literals.values(), Parser.tokenTypes["IDENTIFIER"]]:
+                    UraniumError("SyntaxError", f"Unexpected token at less equals comparison!")
+
+            # check if >= is used correctly
+            if token == Parser.tokenTypes["COMP_GE"]:
+                if not Parser.tokens[i + 1] in [*Parser.literals.values(), Parser.tokenTypes["IDENTIFIER"]]:
+                    UraniumError("SyntaxError", f"Unexpected token at greater equals comparison!")
+
+            # check if < is used correctly
+            if token == Parser.tokenTypes["L_ANGLE"]:
+                if not Parser.tokens[i + 1] in [*Parser.literals.values(), Parser.tokenTypes["IDENTIFIER"]]:
+                    UraniumError("SyntaxError", f"Unexpected token at less than comparison!")
+
+            # check if > is used correctly
+            if token == Parser.tokenTypes["R_ANGLE"]:
+                if not Parser.tokens[i + 1] in [*Parser.literals.values(), Parser.tokenTypes["IDENTIFIER"]]:
+                    UraniumError("SyntaxError", f"Unexpected token at greater than comparison!")
+
             # check if identifiers are used correctly
             if token == Parser.tokenTypes["IDENTIFIER"]:
-                if Parser.tokens[i + 1] in [Parser.tokenTypes["EQUALS"], Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["L_PAREN"], Parser.tokenTypes["ELLIPSIS"]]:
+                if Parser.tokens[i + 1] in [Parser.tokenTypes["EQUALS"], Parser.tokenTypes["NEWLINE"], Parser.tokenTypes["L_PAREN"], Parser.tokenTypes["ELLIPSIS"], *Parser.comparisons.values()]:
                     i += 1
                     continue
                 else:

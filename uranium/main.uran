@@ -1,4 +1,9 @@
 int main(){
-    bool a = 5
+    /*
+     * comments
+     * are
+     * ignored
+    */
+    bool a = 3 > 2
     return a
 }

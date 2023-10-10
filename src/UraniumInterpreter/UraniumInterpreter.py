@@ -9,8 +9,8 @@ class Interpreter:
     def parseAndLex():
         Parser.readUraniumFile()
         Parser.tokenize()
-        Lexer.groupTokens()
         Parser.showTokens()
+        Lexer.groupTokens()
 
     @staticmethod
     def translate():
@@ -60,6 +60,21 @@ class Interpreter:
 
                 elif token == Parser.tokenTypes["R_BRACE"]:
                     Interpreter.cppCode.append("}")
+
+                elif token == Parser.tokenTypes["COMP_EQ"]:
+                    Interpreter.cppCode.append("==")
+
+                elif token == Parser.tokenTypes["COMP_GE"]:
+                    Interpreter.cppCode.append(">=")
+
+                elif token == Parser.tokenTypes["COMP_LE"]:
+                    Interpreter.cppCode.append("<=")
+
+                elif token == Parser.tokenTypes["L_ANGLE"]:
+                    Interpreter.cppCode.append("<")
+
+                elif token == Parser.tokenTypes["R_ANGLE"]:
+                    Interpreter.cppCode.append(">")
 
                 elif token == Parser.tokenTypes["KW_RETURN"]:
                     Interpreter.cppCode.append("return")
