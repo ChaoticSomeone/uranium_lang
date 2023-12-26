@@ -1,5 +1,4 @@
 clear
-cd C:\Users\deniz\OneDrive\Dokumente\Coding\Uranium_Lang
 py main.py
 ./out/main.exe
 echo ""
