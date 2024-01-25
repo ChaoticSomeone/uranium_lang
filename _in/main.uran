@@ -1,0 +1,17 @@
+import uranium::io
+import uranium::random
+
+func add(a: int, b: int) -> int {
+	return a + b
+}
+
+func sub(a: int, b: int) -> int {
+	return a - b
+}
+
+func main() -> int {
+	test:float
+	num: int = add(10, 5)
+	uranium::io.println("{}", num) // This does something
+	return 0
+}

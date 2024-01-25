@@ -1,0 +1,20 @@
+
+!! CODE DOCUMENTATION (COMMENTS) !!
+
+Features:
+/
+
+Lexer:
+/
+
+Parser:
+	(- basic syntax checker)
+	- syntax checking for literals
+	- syntax checking for identifiers
+
+Compiler:
+	- only copy builtins, if they do not exist yet
+	(the below three fixes have to do with templates/generics)
+	- fix uranium::io.read
+	- fix uranium::random.randint
+	- fix uranium::random.randfloat

@@ -1,0 +1,9 @@
+[Uranium-Compiler]
+no-debug-compiler-output = true
+no-process-times = false
+std-lib-path = "%URANIUM_PATH%"
+reformat-cpp = true
+
+[CPP-Compiler]
+compiler = "g++"
+args = "-std=c++20 -o ./_out/main.exe"

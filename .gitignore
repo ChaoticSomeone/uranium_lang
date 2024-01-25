@@ -1,0 +1,7 @@
+**/cmake-build-debug/
+**/__pycache__/
+**/.idea/
+**/CMakeLists.txt
+**/*.exe
+/grammer.md
+git_repo/

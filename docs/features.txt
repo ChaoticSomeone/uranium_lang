@@ -1,0 +1,14 @@
+Syntax (+checker (?)):
+	main function (+syntax)
+	return statement (+syntax)
+	function declaration & calls (+syntax?)
+	variables, identifiers
+	datatypes and literals (int, floats, bools, strings) (+syntax)
+	arithmetic (+, -, *, /, %)
+	imports (only uranium::std) (+syntax)
+	std libraries: (+syntax?)
+		- io (+syntax?)
+		- random (+syntax?)
+	output to stdout "w/ fmt string"
+	logical comparisons (==, <, <=, >, >=, !=)
+	single line comments
