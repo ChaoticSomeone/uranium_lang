@@ -1,3 +1,6 @@
+[Dev-Settings]
+check-syntax = true
+
 [Uranium-Compiler]
 no-debug-compiler-output = true
 no-process-times = false

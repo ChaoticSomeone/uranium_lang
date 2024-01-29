@@ -16,9 +16,15 @@ class Logger:
 
 	@staticmethod
 	def timestamp(message:str="", use_total_time:bool=False):
-		if len(message) > 0:
+		if message:
 			if not Config.ignore_timestamp_output:
 				Logger._t2 = time.time()
 				dt:float = Logger._t2 - (Logger._tt1 if use_total_time else Logger._t1)
 				print(colored(f"{message} {dt:.5f} seconds", "green" if dt < 3 else "red"))
 				Logger._t1 = Logger._t2
+
+	@staticmethod
+	def log(message:str="", fg:str="white", bg:str="on_black"):
+		if message:
+			print(colored(message, fg, bg))
+

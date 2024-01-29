@@ -2,6 +2,8 @@ import toml
 import os
 
 class Config:
+	check_syntax:bool = True
+
 	ignore_debug_output:bool = False
 	std_lib_path:str = "/"
 	reformat_cpp:bool = False
@@ -13,6 +15,8 @@ class Config:
 	def read_config():
 		with open("config.toml") as config:
 			data = toml.load(config)
+
+			Config.check_syntax = data["Dev-Settings"]["check-syntax"]
 
 			uranium_compiler_config = data["Uranium-Compiler"]
 			Config.ignore_debug_output = uranium_compiler_config["no-debug-compiler-output"]

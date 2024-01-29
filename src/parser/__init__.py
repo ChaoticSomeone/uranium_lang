@@ -68,6 +68,15 @@ class UraniumParser:
 						self.tokens.pop(i - 2)
 						i -= 1
 
+				# fix if statements
+				case TokensEnum.KW_IF:
+					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
+					j = 0
+					while self.tokens[i + j] != TokensEnum.NEWLINE:
+						j += 1
+					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
+
+
 
 				case TokensEnum.NEWLINE:
 					if self.tokens[i - 1] == TokensEnum.NEWLINE:

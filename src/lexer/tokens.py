@@ -71,6 +71,7 @@ class TokensEnum:
 	KW_FUNC = _Token(r"func", "")
 	KW_RETURN = _Token(r"return", "return")
 	KW_IMPORT = _Token(r"import", "#include")
+	KW_IF = _Token(r"if", "if")
 	KW_TRUE = _Token(r"true", "true")
 	KW_FALSE = _Token(r"false", "true")
 

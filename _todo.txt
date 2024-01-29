@@ -2,7 +2,9 @@
 !! CODE DOCUMENTATION (COMMENTS) !!
 
 Features:
-/
+	- if statements (x)
+	- elif --||--
+	- else --||--
 
 Lexer:
 /

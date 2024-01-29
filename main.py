@@ -6,22 +6,25 @@ from src.debug_logging import Logger
 import os
 
 def init():
+	Config.read_config()
+	TokensEnum.load_tokens()
+	Logger.init()
+
+	Logger.log(f"Attempting to load Uranium Standard Libraries into {Config.std_lib_path}", "light_green")
 	uranium_path:str = os.path.join(os.environ["ProgramW6432"], "UraniumLang")
 	if not os.path.isdir(uranium_path):
 		os.mkdir(uranium_path)
 	os.environ["URANIUM_PATH"] = uranium_path
 	os.system("for /r src/builtins %f in (*.h) do @copy \"%f\" \"%URANIUM_PATH%\"")
 
-	Config.read_config()
-	TokensEnum.load_tokens()
-	Logger.init()
 
 def compile(src:str) -> (compiler.UraniumCompiler, list):
 	uranium_lexer = lexer.UraniumLexer(src)
 	tokens = uranium_lexer.tokenize()
 
 	uranium_parser = parser.UraniumParser(tokens)
-	uranium_parser.check_syntax(src)
+	if Config.check_syntax:
+		uranium_parser.check_syntax(src)
 	tokens = uranium_parser.rearrange()
 	print_token_list(tokens, end="####################\n")
 
