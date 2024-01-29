@@ -1,5 +1,6 @@
 # Uranium Lang
 
+**This is an open-source project, feel free to contribute**
 
 # Uranium Lang - Features & Syntax
 
