@@ -1,8 +1,10 @@
 #include <string>
 int main ( ) { 
-    bool num = true ;
+bool num = false ;
 if ( num ) { 
-        return 1 ;
-    } ;
-    return 0 ;
+return 1 ;
+} else { 
+return 2 ;
+} ;
+return 0 ;
 } ;

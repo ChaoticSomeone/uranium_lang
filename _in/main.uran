@@ -1,8 +1,10 @@
 func main() -> int {
-	num: bool = true
+	num: bool = false
 
 	if num {
 		return 1
+	} else {
+		return 2
 	}
 
 	return 0

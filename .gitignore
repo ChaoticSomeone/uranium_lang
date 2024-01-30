@@ -5,3 +5,6 @@
 **/*.exe
 /grammer.md
 git_repo/
+
+installer/vs/**
+!installer/vs/installer_wix/package/bin/x86/Debug/en-US/package.msi

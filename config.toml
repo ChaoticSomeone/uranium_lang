@@ -5,7 +5,7 @@ check-syntax = true
 no-debug-compiler-output = true
 no-process-times = false
 std-lib-path = "%URANIUM_PATH%"
-reformat-cpp = true
+reformat-cpp = false
 
 [CPP-Compiler]
 compiler = "g++"

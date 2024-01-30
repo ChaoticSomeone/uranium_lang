@@ -10,13 +10,14 @@ def init():
 	TokensEnum.load_tokens()
 	Logger.init()
 
+	"""
 	Logger.log(f"Attempting to load Uranium Standard Libraries into {Config.std_lib_path}", "light_green")
 	uranium_path:str = os.path.join(os.environ["ProgramW6432"], "UraniumLang")
 	if not os.path.isdir(uranium_path):
 		os.mkdir(uranium_path)
 	os.environ["URANIUM_PATH"] = uranium_path
 	os.system("for /r src/builtins %f in (*.h) do @copy \"%f\" \"%URANIUM_PATH%\"")
-
+	"""
 
 def compile(src:str) -> (compiler.UraniumCompiler, list):
 	uranium_lexer = lexer.UraniumLexer(src)

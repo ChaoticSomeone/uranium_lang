@@ -72,8 +72,10 @@ class TokensEnum:
 	KW_RETURN = _Token(r"return", "return")
 	KW_IMPORT = _Token(r"import", "#include")
 	KW_IF = _Token(r"if", "if")
+	KE_ELSE_IF = _Token("else if", "else if")
+	KW_ELSE = _Token(r"else", "else")
 	KW_TRUE = _Token(r"true", "true")
-	KW_FALSE = _Token(r"false", "true")
+	KW_FALSE = _Token(r"false", "false")
 
 	KEYWORDS = _TokenGroup(KW_FUNC, KW_FALSE)
 

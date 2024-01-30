@@ -12,3 +12,6 @@ Syntax (+checker (?)):
 	output to stdout "w/ fmt string"
 	logical comparisons (==, <, <=, >, >=, !=)
 	single line comments
+	Control Flow:
+		- if statements
+		- else statements
