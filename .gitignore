@@ -6,5 +6,11 @@
 /grammer.md
 git_repo/
 
-installer/vs/**
+installer/vs/*
+!installer/vs/installer_wix
+installer/vs/installer_wix/*
+!installer/vs/installer_wix/package
+installer/vs/installer_wix/package/*
+!installer/vs/installer_wix/package/bin
+installer/vs/installer_wix/package/bin/x86/Debug/en-US/*
 !installer/vs/installer_wix/package/bin/x86/Debug/en-US/package.msi
