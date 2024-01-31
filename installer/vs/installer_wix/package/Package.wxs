@@ -1,0 +1,23 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+	<Package Name="Uranium Lang" Manufacturer="ChaoticSomeone" Version="1.0.0.0" UpgradeCode="4dd0e6b2-304e-45d0-9aaa-7922bbe7b391">
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+		<Feature Id="Main" Title="Required Features" AllowAbsent="false"
+				 Description="These features are required for Uranium Lang to work appropriately">
+			<FeatureGroupRef Id="RequiredFeatures"/>
+		</Feature>
+		<Feature Id="Optionals" Title="Optional Features" AllowAbsent="true"
+				 Description="All features of Uranium Lang, that aren't required">
+			<FeatureGroupRef Id="OptionalFeatures"/>
+		</Feature>
+		
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+		
+		<ui:WixUI
+		   Id="WixUI_FeatureTree"
+		   InstallDirectory="INSTALLFOLDER"
+        />
+	</Package>
+
+</Wix>

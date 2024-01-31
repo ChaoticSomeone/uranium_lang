@@ -1,0 +1,12 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<FeatureGroup Id="OptionalFeatures">
+			
+			<Feature Id="Config" Title="Config.toml" AllowAbsent="true"
+					 Description="A config file for the compiler, this is just for TESTING">
+				<ComponentGroupRef Id="TestOptionals" />
+			</Feature>
+			
+		</FeatureGroup>
+	</Fragment>
+</Wix>

@@ -1,0 +1,22 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<FeatureGroup Id="RequiredFeatures">
+			
+			<Feature Id="Compiler" Title="Compiler" AllowAbsent="false"
+					 Description="Contains the compiler for Uranium Lang">
+				<ComponentGroupRef Id="AppComponents" />
+			</Feature>
+
+			<Feature Id="StdLibs" Title="Standard Libraries" AllowAbsent="false"
+					 Description="A collection of all required standard libraries of Uranium Lang">
+				<ComponentGroupRef Id="LibComponents" />
+			</Feature>
+			
+			<Feature Id="Environment" Title="URANIUM_PATH" AllowAbsent="false"
+					 Description="URANIUM_PATH is an environemnt variable that helps the compiler to find the location of its components">
+				<ComponentGroupRef Id="EnvComponents"/>
+			</Feature>
+			
+		</FeatureGroup>
+	</Fragment>
+</Wix>

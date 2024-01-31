@@ -1,0 +1,10 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+	<ComponentGroup Id="LibComponents" Directory="INSTALLFOLDER">
+		<Component Id="Libs" Guid="{EF89AAB3-1913-496A-8785-6AD321E1B05C}">
+			<File Source="../../../../src/builtins/io.h" />
+			<File Source="../../../../src/builtins/random.h" />
+		</Component>
+	</ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,9 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+	<ComponentGroup Id="AppComponents" Directory="INSTALLFOLDER">
+		<Component Guid="{759E7773-50AE-494F-B913-AB4F9626898B}">
+			<File Source="../../../../main.py" />
+		</Component>
+	</ComponentGroup>
+  </Fragment>
+</Wix>

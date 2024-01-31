@@ -1,0 +1,9 @@
+<Project Sdk="WixToolset.Sdk/4.0.3">
+  <PropertyGroup>
+    <ProductVersion>1.0.0.0</ProductVersion>
+    <OutputName>UraniumLangInstaller_$(ProductVersion)</OutputName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+	<ComponentGroup Id="EnvComponents" Directory="INSTALLFOLDER">
+		<Component Id="Envs" Guid="{6BF3AEDF-9CDE-4D52-A976-0D4E99E3D501}">
+			<Environment Id="URANIUM_PATH" Name="URANIUM_PATH" Value="[INSTALLFOLDER]" Permanent="yes" Action="set" Part="all" System="yes" />
+		</Component>
+	</ComponentGroup>
+  </Fragment>
+</Wix>
