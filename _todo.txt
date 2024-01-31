@@ -2,7 +2,8 @@
 !! CODE DOCUMENTATION (COMMENTS) !!
 
 Features:
-	- elif --||--
+	- shorthand assignments
+	- for loops
 
 Lexer:
 /
@@ -13,7 +14,6 @@ Parser:
 	- syntax checking for identifiers
 
 Compiler:
-	- only copy builtins, if they do not exist yet
 	(the below three fixes have to do with templates/generics)
 	- fix uranium::io.read
 	- fix uranium::random.randint

@@ -1,5 +1,6 @@
 [Dev-Settings]
 check-syntax = true
+write-tokens = true
 
 [Uranium-Compiler]
 no-debug-compiler-output = true

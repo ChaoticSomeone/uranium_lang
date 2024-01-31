@@ -1,6 +1,6 @@
 Clear-Host
 Write-Host "Running the Uranium Compiler..." -ForegroundColor Green
-py main.py
+py uranc.py
 if ($LastExitCode -eq 0) {
     Write-Host "`nRunning the final executeable..." -ForegroundColor Green
     ./_out/main.exe

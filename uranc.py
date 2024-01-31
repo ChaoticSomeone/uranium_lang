@@ -3,6 +3,7 @@ from src.config import Config
 from src.lexer.tokens import print_token_list, TokensEnum
 from src.formatter import Formatter
 from src.debug_logging import Logger
+from src.errors import UraniumError
 import os
 
 def init():
@@ -10,14 +11,8 @@ def init():
 	TokensEnum.load_tokens()
 	Logger.init()
 
-	"""
-	Logger.log(f"Attempting to load Uranium Standard Libraries into {Config.std_lib_path}", "light_green")
-	uranium_path:str = os.path.join(os.environ["ProgramW6432"], "UraniumLang")
-	if not os.path.isdir(uranium_path):
-		os.mkdir(uranium_path)
-	os.environ["URANIUM_PATH"] = uranium_path
-	os.system("for /r src/builtins %f in (*.h) do @copy \"%f\" \"%URANIUM_PATH%\"")
-	"""
+	if os.environ.get("URANIUM_PATH") is None:
+		raise UraniumError("Environment variable 'URANIUM_PATH' does not exist!")
 
 def compile(src:str) -> (compiler.UraniumCompiler, list):
 	uranium_lexer = lexer.UraniumLexer(src)

@@ -15,3 +15,6 @@ Syntax (+checker (?)):
 	Control Flow:
 		- if statements
 		- else statements
+		- else if statements
+
+		- while loops

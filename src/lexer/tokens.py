@@ -37,10 +37,10 @@ class Token:
 			return self.token.id == other.token.id
 
 	def __str__(self):
-		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta[0]) != 0 else ""})"
+		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
 	def __repr__(self):
-		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta[0]) != 0 else ""})"
+		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
 
 # this class allows us to group "similar" tokens
@@ -72,8 +72,9 @@ class TokensEnum:
 	KW_RETURN = _Token(r"return", "return")
 	KW_IMPORT = _Token(r"import", "#include")
 	KW_IF = _Token(r"if", "if")
-	KE_ELSE_IF = _Token("else if", "else if")
+	KW_ELSE_IF = _Token("else if", "else if")
 	KW_ELSE = _Token(r"else", "else")
+	KW_WHILE = _Token(r"while", "while")
 	KW_TRUE = _Token(r"true", "true")
 	KW_FALSE = _Token(r"false", "false")
 

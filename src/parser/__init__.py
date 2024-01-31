@@ -76,7 +76,19 @@ class UraniumParser:
 						j += 1
 					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
 
+				case TokensEnum.KW_ELSE_IF:
+					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
+					j = 0
+					while self.tokens[i + j] != TokensEnum.NEWLINE:
+						j += 1
+					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
 
+				case TokensEnum.KW_WHILE:
+					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
+					j = 0
+					while self.tokens[i + j] != TokensEnum.NEWLINE:
+						j += 1
+					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
 
 				case TokensEnum.NEWLINE:
 					if self.tokens[i - 1] == TokensEnum.NEWLINE:
@@ -84,6 +96,7 @@ class UraniumParser:
 						i -= 1
 
 			for composite in TokensEnum.composites2:
+
 				if self.tokens[i] == composite[0] and self.tokens[i + 1] == composite[1]:
 					match composite:
 						case TokensEnum.OP_EQUALS_COMP:
@@ -106,6 +119,10 @@ class UraniumParser:
 
 
 	def check_syntax(self, src_path:str):
+		if Config.write_tokens:
+			with open("tokens.txt", "w") as f:
+				f.write("\n".join(map(lambda tok: str(tok), self.tokens)))
+
 		parenthese:dict = {
 			"L_PAREN": 0,
 			"R_PAREN": 0,
@@ -145,7 +162,7 @@ class UraniumParser:
 						raise errors.UraniumSyntaxError(f"Expected datatype after return type specifier '->' in line {line} of file '{src_path}'")
 
 				case TokensEnum.SYM_EQUALS:
-					if self.peek(i, 1) not in TokensEnum.LITERALS and self.peek(i, 1) not in [TokensEnum.STD_URANIUM, TokensEnum.IDENTIFIER, TokensEnum.KW_TRUE, TokensEnum.KW_FALSE, TokensEnum.SYM_PLUS, TokensEnum.SYM_MINUS, TokensEnum.SYM_L_PAREN]:
+					if self.peek(i, 1) not in TokensEnum.LITERALS and self.peek(i, 1) not in [TokensEnum.STD_URANIUM, TokensEnum.IDENTIFIER, TokensEnum.KW_TRUE, TokensEnum.KW_FALSE, TokensEnum.SYM_PLUS, TokensEnum.SYM_MINUS, TokensEnum.SYM_L_PAREN, TokensEnum.SYM_EQUALS]:
 						raise errors.UraniumSyntaxError(f"Expected identifier or literal after '=' in line {line} of file '{src_path}'")
 
 				case TokensEnum.STD_URANIUM:
