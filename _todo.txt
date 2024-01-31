@@ -8,6 +8,8 @@ Lexer:
 /
 
 Parser:
+	- currently rewriting the entire parser
+
 	(- basic syntax checker)
 	- syntax checking for literals
 	- syntax checking for identifiers

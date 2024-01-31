@@ -4,6 +4,7 @@ import os
 class Config:
 	check_syntax:bool = True
 	write_tokens:bool = False
+	new_parser:bool = False
 
 	ignore_debug_output:bool = False
 	std_lib_path:str = "/"
@@ -17,8 +18,10 @@ class Config:
 		with open("config.toml") as config:
 			data = toml.load(config)
 
-			Config.check_syntax = data["Dev-Settings"]["check-syntax"]
-			Config.write_tokens = data["Dev-Settings"]["write-tokens"]
+			dev_config = data["Dev-Settings"]
+			Config.check_syntax = dev_config["check-syntax"]
+			Config.write_tokens = dev_config["write-tokens"]
+			Config.new_parser = dev_config["new-parser"]
 
 			uranium_compiler_config = data["Uranium-Compiler"]
 			Config.ignore_debug_output = uranium_compiler_config["no-debug-compiler-output"]

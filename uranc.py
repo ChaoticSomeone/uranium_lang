@@ -4,6 +4,8 @@ from src.lexer.tokens import print_token_list, TokensEnum
 from src.formatter import Formatter
 from src.debug_logging import Logger
 from src.errors import UraniumError
+from src.parser.precedence import PrecedenceAssigner
+from src.parser.uran_ast import Ast
 import os
 
 def init():
@@ -18,11 +20,14 @@ def compile(src:str) -> (compiler.UraniumCompiler, list):
 	uranium_lexer = lexer.UraniumLexer(src)
 	tokens = uranium_lexer.tokenize()
 
-	uranium_parser = parser.UraniumParser(tokens)
-	if Config.check_syntax:
-		uranium_parser.check_syntax(src)
-	tokens = uranium_parser.rearrange()
-	print_token_list(tokens, end="####################\n")
+	if Config.new_parser:
+		precedence = PrecedenceAssigner(tokens)
+		tokens = precedence.assign()
+	else:
+		uranium_parser = parser.UraniumParser(tokens)
+		if Config.check_syntax:
+			uranium_parser.check_syntax(src)
+		tokens = uranium_parser.rearrange()
 
 	uranium_compiler = compiler.UraniumCompiler(tokens)
 	return uranium_compiler, uranium_compiler.generate_cpp()
@@ -41,6 +46,8 @@ def write_output(dest:str, cpp_code:list):
 		formatter = Formatter(dest)
 		with open(dest, "w") as output_file:
 			output_file.writelines(formatter.reformat())
+
+
 
 if __name__ == '__main__':
 	init()

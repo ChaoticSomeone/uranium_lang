@@ -26,9 +26,10 @@ class _Token:
 
 
 class Token:
-	def __init__(self, parent:_Token,  meta:list=[]):
+	def __init__(self, parent:_Token,  meta:list=[], precedence:int=-1):
 		self.token = parent
 		self.meta = meta
+		self.precedence = precedence
 
 	def __eq__(self, other):
 		if isinstance(other, _Token):
@@ -143,6 +144,15 @@ class TokensEnum:
 		OP_LESS_EQUALS_COMP,
 		OP_GREATER_EQUALS_COMP,
 		OP_NOT_EQUAL_COMP
+	]
+
+	COMPARISONS = [
+		OP_EQUALS,
+		OP_NOT_EQUAL,
+		OP_GREATER_EQUALS,
+		OP_LESS_EQUALS,
+		SYM_L_ANGLE,
+		SYM_R_PAREN
 	]
 
 	# other misc
