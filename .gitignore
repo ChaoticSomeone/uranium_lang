@@ -8,6 +8,7 @@ git_repo/
 tokens.txt
 template.cpp
 _out/
+_in/
 
 installer/vs/*
 !installer/vs/installer_wix
