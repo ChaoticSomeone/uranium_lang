@@ -6,6 +6,8 @@
 /grammer.md
 git_repo/
 tokens.txt
+template.cpp
+_out/
 
 installer/vs/*
 !installer/vs/installer_wix

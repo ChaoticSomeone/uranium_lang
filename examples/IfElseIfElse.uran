@@ -1,0 +1,15 @@
+import uranium::io
+
+func main() -> int {
+	num: int = 20 // change this to see everything work
+
+	if num == 10 {
+		uranium::io.println("Tne number is 10")
+	} else if num < 10 {
+		uranium::io.println("Tne number is less than 10")
+	} else {
+		uranium::io.println("Tne number is greater than 10")
+	}
+
+	return 0
+}

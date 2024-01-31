@@ -1,0 +1,12 @@
+import uranium::io
+
+func main() -> int {
+	num: int = 5
+	pi: float = 3.14159
+	flag: bool = true
+	text: string = "Hello World"
+
+	uranium::io.println("pi is {}", pi)
+
+	return 0
+}

@@ -1,0 +1,6 @@
+import uranium::io
+
+func main() -> int {
+	uranium::io.println("Hello World")
+	return 0
+}
