@@ -18,3 +18,4 @@ Syntax (+checker (?)):
 		- else if statements
 
 		- while loops
+		- for loops (WIP)

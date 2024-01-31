@@ -75,6 +75,7 @@ class TokensEnum:
 	KW_ELSE_IF = _Token("else if", "else if")
 	KW_ELSE = _Token(r"else", "else")
 	KW_WHILE = _Token(r"while", "while")
+	KW_FOR = _Token(r"for", "for")
 	KW_TRUE = _Token(r"true", "true")
 	KW_FALSE = _Token(r"false", "false")
 
@@ -118,9 +119,11 @@ class TokensEnum:
 	SYMBOLS = _TokenGroup(SYM_L_PAREN, SYM_EQUALS)
 
 	# not part of Uranium
-	EXTERNAL_VOID = _Token(r"void", "void", "void")
+	EXTERNAL_VOID = _Token(r"void", "void", "void", False)
+	EXTERNAL_EXPR = _Token("", "", "External Statement", False)
+	EXTERNAL_SEMICOLON = _Token(r";", ";", "Semicolon", False)
 
-	EXTERNALS = _TokenGroup(EXTERNAL_VOID, EXTERNAL_VOID)
+	EXTERNALS = _TokenGroup(EXTERNAL_VOID, EXTERNAL_SEMICOLON)
 
 	# composite operators (2 characters)
 	OP_EQUALS = _Token("", "==", "logical equals", False)

@@ -90,6 +90,30 @@ class UraniumParser:
 						j += 1
 					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
 
+				case TokensEnum.KW_FOR:
+					# @ToDo
+					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
+					j = 0
+					while self.tokens[i + j] != TokensEnum.NEWLINE:
+						j += 1
+					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
+
+					j = 0
+					commas:int = 0
+					iterator:Token = None
+					while self.tokens[i + j] != TokensEnum.SYM_R_PAREN:
+						if commas == 0 and self.tokens[i + j] == TokensEnum.IDENTIFIER:
+							iterator = self.tokens[i + j]
+						if commas == 2:
+							meta:str = self.tokens[i + j].meta
+							self.tokens[i + j] = Token(TokensEnum.EXTERNAL_EXPR)
+							self.tokens[i + j].meta = [f"{iterator.meta[0]} += {meta[0]}"]
+
+						if self.tokens[i + j] == TokensEnum.SYM_COMMA:
+							self.tokens[i + j] = Token(TokensEnum.EXTERNAL_SEMICOLON)
+							commas += 1
+						j += 1
+
 				case TokensEnum.NEWLINE:
 					if self.tokens[i - 1] == TokensEnum.NEWLINE:
 						self.tokens.pop(i)

@@ -1,10 +1,8 @@
 import uranium::io
 
 func main() -> int {
-	num: int = 0
 
-	while num < 10 {
-		num = num + 1
+	for num:int = 0, num < 10, 1 {
 		uranium::io.println("{}", num)
 	}
 

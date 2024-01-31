@@ -3,7 +3,6 @@
 
 Features:
 	- shorthand assignments
-	- for loops
 
 Lexer:
 /

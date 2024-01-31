@@ -29,7 +29,7 @@ class UraniumCompiler:
 				if self.peek(i, 1) == TokensEnum.NEWLINE:
 					i += 1
 
-			elif token in TokensEnum.LITERALS or token in [TokensEnum.STD_IDENTIFIER, TokensEnum.IDENTIFIER]:
+			elif token in TokensEnum.LITERALS or token in [TokensEnum.STD_IDENTIFIER, TokensEnum.IDENTIFIER, TokensEnum.EXTERNAL_EXPR]:
 				output.append(f"{token.meta[0]}")
 
 			else:
