@@ -1,3 +1,5 @@
+
+# hide all files that are irrevelant to the project
 **/cmake-build-debug/
 **/__pycache__/
 **/.idea/
@@ -10,6 +12,12 @@ template.cpp
 _out/
 _in/
 
+
+# hide the unfinished parser stuff
+src/parser/
+!src/parser/__init__.py
+
+# hide all the installer files no one needs
 installer/vs/*
 !installer/vs/installer_wix
 installer/vs/installer_wix/*
