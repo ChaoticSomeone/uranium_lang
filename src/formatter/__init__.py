@@ -2,6 +2,11 @@ from src.config import Config
 from src import errors
 
 class Formatter:
+	"""
+	This formatter is so flawed, that I won't even bother to explain
+	"""
+
+
 	__has_instance = False
 
 	def __init__(self, cpp_path:str):

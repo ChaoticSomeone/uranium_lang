@@ -1,6 +1,13 @@
 import toml
 import os
 
+
+"""
+This file will handle compiler settings, until I switch from toml-files to
+command line arguments
+"""
+
+
 class Config:
 	check_syntax:bool = True
 	write_tokens:bool = False

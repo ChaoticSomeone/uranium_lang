@@ -15,9 +15,18 @@ class UraniumParser:
 			errors.UraniumError("Class 'UraniumParser' (singleton) can only have one instance")
 
 	def peek(self, i:int, offset:int) -> Token:
+		"""
+		Probably never used this in the codebase, a shame.
+		Anyway, looks ahead in the tokens list
+		"""
 		return self.tokens[i + offset] if i + offset < len(self.tokens) else None
 
 	def rearrange(self) -> list:
+		"""
+		I would rather not explain this method.
+		It rearranges the tokens to make the transition to C++ easier, besides that I expect you
+		to ignore the wizardry performed here.
+		"""
 		i = 0
 
 		while i < len(self.tokens):
@@ -143,6 +152,12 @@ class UraniumParser:
 
 
 	def check_syntax(self, src_path:str):
+		"""
+		@ToDo
+		Roughly, very roughly check the validity of the syntax.
+		I know, I know that I should get this fixed, but I have my
+		priorities else where
+		"""
 		if Config.write_tokens:
 			with open("tokens.txt", "w") as f:
 				f.write("\n".join(map(lambda tok: str(tok), self.tokens)))

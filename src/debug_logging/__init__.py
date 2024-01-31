@@ -16,6 +16,9 @@ class Logger:
 
 	@staticmethod
 	def timestamp(message:str="", use_total_time:bool=False):
+		""""
+		Mainly used to measure the time needed of the different compiler actions
+		"""
 		if message:
 			if not Config.ignore_timestamp_output:
 				Logger._t2 = time.time()
@@ -25,6 +28,9 @@ class Logger:
 
 	@staticmethod
 	def log(message:str="", fg:str="white", bg:str="on_black"):
+		"""
+		Allows us to easily output some colored text
+		"""
 		if message:
 			print(colored(message, fg, bg))
 

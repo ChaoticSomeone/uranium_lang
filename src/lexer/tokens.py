@@ -1,7 +1,10 @@
 from src.config import Config
 
-# a class that helps with managing different tokens
 class _Token:
+	"""
+	This class helps us with creating the actual tokens.
+	_Token instances are essentially templates for the real tokens
+	"""
 	next_id:int = 0
 
 	def __init__(self, pattern:str, cpp_translate:str, name:str="", has_pattern:bool=True):
@@ -26,6 +29,10 @@ class _Token:
 
 
 class Token:
+	"""
+	This class represents a token, it contains the template (_Token) it inherited from,
+	a list of metadata and a precedence level
+	"""
 	def __init__(self, parent:_Token,  meta:list=[], precedence:int=-1):
 		self.token = parent
 		self.meta = meta
@@ -44,8 +51,12 @@ class Token:
 		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
 
-# this class allows us to group "similar" tokens
 class _TokenGroup:
+	"""
+	Allows the grouping of similar tokens (_Token) and
+	generally saved me a ton of typing.
+	Thank me for the readability this brought.
+	"""
 	def __init__(self, start:_Token, end:_Token):
 		self.start = start.id
 		self.end = end.id
@@ -60,9 +71,12 @@ class _TokenGroup:
 		return range(self.start, self.end + 1)
 
 
-# just treat this one as an enum
-# contains all the different tokens
 class TokensEnum:
+	"""
+	This monstrosity of a class should be used only as an enumeration.
+	It contains every single token, several token groups,...
+	Please do not diverge from intended usage, Python doesn't support proper enums
+	"""
 	# misc
 	NEWLINE = _Token(r"\n", "","newline")
 
@@ -170,6 +184,10 @@ class TokensEnum:
 
 
 def print_token_list(tokens:list, end:str="\n") -> None:
+	"""
+	@ToDo
+	This will be deleted sooner or later
+	"""
 	if not Config.ignore_debug_output:
 		for token in tokens:
 			print(token)
