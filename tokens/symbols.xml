@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TokenGroup Id="symbols" Name="Symbols">
+	<Token Id="l_paren" Name="(">
+		<Pattern>\(</Pattern>
+		<Translatons>
+			<CPP>(</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="r_paren" Name=")">
+		<Pattern>\)</Pattern>
+		<Translatons>
+			<CPP>)</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="l_curly" Name="{">
+		<Pattern>\{</Pattern>
+		<Translatons>
+			<CPP>{</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="r_curly" Name="}">
+		<Pattern>\}</Pattern>
+		<Translatons>
+			<CPP>}</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="namespace_delimiter" Name="Namespace Delimiter">
+		<Pattern>::</Pattern>
+		<Translatons>
+			<CPP>/</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="comma" Name="Comma">
+		<Pattern>,</Pattern>
+		<Translatons>
+			<CPP>,</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="dot" Name="Dot">
+			<Pattern>\.</Pattern>
+			<Translatons>
+				<CPP>::</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="l_angle" Name="Left Angle">
+			<Pattern>&lt;</Pattern>
+			<Translatons>
+				<CPP>&lt;</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="r_angle" Name="Right Angle">
+			<Pattern>&gt;</Pattern>
+			<Translatons>
+				<CPP>&gt;</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="exclamation" Name="Exclamation Mark">
+			<Pattern>!</Pattern>
+			<Translatons>
+				<CPP>!</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="ret_type" Name="Return Type">
+			<Pattern>-></Pattern>
+			<Translatons>
+				<CPP>""</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="type" Name="Type Delimiter">
+			<Pattern>:</Pattern>
+			<Translatons>
+				<CPP>""</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="plus" Name="Plus">
+			<Pattern>\+</Pattern>
+			<Translatons>
+				<CPP>+</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="minus" Name="Minus">
+			<Pattern>-</Pattern>
+			<Translatons>
+				<CPP>-</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="asterisk" Name="Asterisk">
+			<Pattern>\*</Pattern>
+			<Translatons>
+				<CPP>*</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="slash" Name="Slash">
+			<Pattern>/</Pattern>
+			<Translatons>
+				<CPP>/</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="percent" Name="Percent">
+			<Pattern>%</Pattern>
+			<Translatons>
+				<CPP>%</CPP>
+			</Translatons>
+	</Token>
+
+	<Token Id="equals" Name="Equals (=)">
+			<Pattern>=</Pattern>
+			<Translatons>
+				<CPP>=</CPP>
+			</Translatons>
+	</Token>
+</TokenGroup>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TokenGroup Id="misc" Name="Misc">
+	<Token Id="newline" Name="Newline">
+		<Pattern>\n</Pattern>
+		<Translatons>
+			<CPP>""</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="std_uranium" Name="uranium std">
+		<Pattern>uranium</Pattern>
+		<Translatons>
+			<CPP>""</CPP>
+		</Translatons>
+	</Token>
+</TokenGroup>

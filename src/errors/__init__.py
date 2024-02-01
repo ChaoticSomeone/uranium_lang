@@ -27,3 +27,8 @@ class UraniumSyntaxError(UraniumError):
 	"""
 	def __init__(self, message:str=""):
 		super().__init__(message)
+
+
+class UraniumXmlParseError(UraniumError):
+	def __init__(self, message:str=""):
+		super().__init__(message)

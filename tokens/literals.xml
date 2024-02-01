@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TokenGroup Id="literals" Name="Literals">
+	<Token Id="lit_float" Name="Float Literal">
+		<Pattern>\d*\.\d+</Pattern>
+		<Translatons>
+			<CPP>""</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="lit_int" Name="Int Literal">
+		<Pattern>\d+</Pattern>
+		<Translatons>
+			<CPP>""</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="lit_string" Name="String Literal">
+		<Pattern>\".*\"</Pattern>
+		<Translatons>
+			<CPP>""</CPP>
+		</Translatons>
+	</Token>
+</TokenGroup>

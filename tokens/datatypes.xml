@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TokenGroup Id="datatypes" Name="Datatypes">
+	<Token Id="int" Name="Int">
+		<Pattern>int</Pattern>
+		<Translatons>
+			<CPP>int</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="float" Name="Float">
+		<Pattern>float</Pattern>
+		<Translatons>
+			<CPP>float</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="string" Name="String">
+		<Pattern>string</Pattern>
+		<Translatons>
+			<CPP>std::string</CPP>
+		</Translatons>
+	</Token>
+
+	<Token Id="bool" Name="Bool">
+		<Pattern>bool</Pattern>
+		<Translatons>
+			<CPP>bool</CPP>
+		</Translatons>
+	</Token>
+</TokenGroup>

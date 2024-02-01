@@ -1,5 +1,5 @@
 
-!! CODE DOCUMENTATION (COMMENTS) !!
+CODE DOCUMENTATION (COMMENTS)
 
 Features:
 	- shorthand assignments
