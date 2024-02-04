@@ -1,5 +1,6 @@
 from src.config import Config
 from src import errors
+from json import JSONEncoder
 
 class TokenTemplate:
 	def __init__(self, pattern: str, cpp_translate: str, name: str = "", _id: str = ""):
@@ -42,6 +43,9 @@ class Token:
 	def __repr__(self):
 		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
+class TokenJsonEncoder(JSONEncoder):
+	def default(self, o):
+		return o.__dict__
 
 class TokenGroup:
 

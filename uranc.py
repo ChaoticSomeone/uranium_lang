@@ -12,7 +12,7 @@ def init():
 	Config.read_config()
 	# load the tokens
 	XmlParser.generate("u")
-	# init. the token_gen and logger
+	# init. the tokens and logger
 	Logger.init()
 
 	# we need the env. variable, thus th error
@@ -20,24 +20,18 @@ def init():
 		raise UraniumError("Environment variable 'URANIUM_PATH' does not exist!")
 
 def compile(src:str) -> (compiler.UraniumCompiler, list):
-	# generate a list of token_gen from the source code
+	# generate a list of tokens from the source code
 	uranium_lexer = lexer.UraniumLexer(src)
-	token_gen = uranium_lexer.tokenize()
+	tokens = uranium_lexer.tokenize()
 
 	# run the parser
-	if Config.new_parser:
-		from src.parser.precedence import PrecedenceAssigner
-		from src.parser.uran_ast import Ast
-		precedence = PrecedenceAssigner(token_gen)
-		token_gen = precedence.assign()
-	else:
-		uranium_parser = parser.UraniumParser(token_gen)
-		if Config.check_syntax:
-			uranium_parser.check_syntax(src)
-		token_gen = uranium_parser.rearrange()
+	uranium_parser = parser.UraniumParser(tokens)
+	if Config.check_syntax:
+		uranium_parser.check_syntax(src)
+	tokens = uranium_parser.rearrange()
 
 	# generate the final C++ code
-	uranium_compiler = compiler.UraniumCompiler(token_gen)
+	uranium_compiler = compiler.UraniumCompiler(tokens)
 	return uranium_compiler, uranium_compiler.generate_cpp()
 
 def write_output(dest:str, cpp_code:list):
@@ -67,16 +61,20 @@ if __name__ == '__main__':
 
 	# run the compiler
 	src_path = "./_in/main.uran"
-	uranium_compiler, cpp = compile(src_path)
-	Logger.timestamp("Compilation took")
 
-	# generate some output
-	cpp_path = "./_out/main.cpp"
-	write_output(cpp_path, cpp)
-	Logger.timestamp("Writing to output took")
+	if Config.new_parser:
+		from src.parser.uran_ast import UraniumParser
+	else:
+		uranium_compiler, cpp = compile(src_path)
+		Logger.timestamp("Compilation took")
 
-	# let a C++ compiler finish the compilation
-	uranium_compiler.compile(cpp_path)
-	Logger.timestamp("C++ Compiler took")
+		# generate some output
+		cpp_path = "./_out/main.cpp"
+		write_output(cpp_path, cpp)
+		Logger.timestamp("Writing to output took")
 
-	Logger.timestamp("Total time taken:", True)
+		# let a C++ compiler finish the compilation
+		uranium_compiler.compile(cpp_path)
+		Logger.timestamp("C++ Compiler took")
+
+		Logger.timestamp("Total time taken:", True)

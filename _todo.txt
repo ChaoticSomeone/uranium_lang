@@ -8,7 +8,7 @@ Optimizations:
 	- Make all code that uses the generated tokens use specified toke groups instead of the one that contains all tokens
 
 Lexer:
-	- WIP: Add postions to Tokens
+/
 
 Parser:
 	(- currently rewriting the entire parser )
