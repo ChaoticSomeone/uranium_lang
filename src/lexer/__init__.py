@@ -54,20 +54,22 @@ class UraniumLexer:
 					if not tok.pattern:
 						i += 1
 						continue
+
 					# check if the current token matches
 					if (token_match := re.match("\n" if tok.pattern == r"\n" else fr"{tok.pattern}", remaining)) is not None:
 						is_valid = True
 						# setting up token properties
 						meta = [""]
 						group = token_match.group()
+						position:list = [line_number, token_match.start(), token_match.end()]
 						if tok in TokenGroups.u_token_group_literals or tok == TokenGroups.token_group_all.get("identifiers"):
 							meta[0] = group
 
 						# create the token
 						if tok == TokenGroups.token_group_all.get("identifiers") and group in BuiltIns.LIBS:
-							token = Token(TokenGroups.token_group_all.get("std_identifier"), meta)
+							token = Token(TokenGroups.token_group_all.get("std_identifier"), meta, position)
 						else:
-							token = Token(tok, meta)
+							token = Token(tok, meta, position)
 
 						# extend the token list
 						all_tokens.append(token)

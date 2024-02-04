@@ -25,9 +25,10 @@ class TokenTemplate:
 
 
 class Token:
-	def __init__(self, parent:TokenTemplate, meta: list = []):
+	def __init__(self, parent:TokenTemplate, meta:list=[], position:list[int, int, int]=[0, 0, 0]):
 		self.token = parent
 		self.meta = meta
+		self.position = position
 
 	def __eq__(self, other):
 		if isinstance(other, TokenTemplate):
