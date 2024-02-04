@@ -1,16 +1,18 @@
 from src import lexer, parser, compiler
 from src.config import Config
-from src.lexer.tokens import print_token_list, TokensEnum
 from src.formatter import Formatter
 from src.debug_logging import Logger
 from src.errors import UraniumError
+from token_gen.xml_parser import XmlParser
 import os
+
 
 def init():
 	# load all the options from config.toml
 	Config.read_config()
-	# init. the tokens and logger
-	TokensEnum.load_tokens()
+	# load the tokens
+	XmlParser.generate("u")
+	# init. the token_gen and logger
 	Logger.init()
 
 	# we need the env. variable, thus th error
@@ -18,24 +20,24 @@ def init():
 		raise UraniumError("Environment variable 'URANIUM_PATH' does not exist!")
 
 def compile(src:str) -> (compiler.UraniumCompiler, list):
-	# generate a list of tokens from the source code
+	# generate a list of token_gen from the source code
 	uranium_lexer = lexer.UraniumLexer(src)
-	tokens = uranium_lexer.tokenize()
+	token_gen = uranium_lexer.tokenize()
 
 	# run the parser
 	if Config.new_parser:
 		from src.parser.precedence import PrecedenceAssigner
 		from src.parser.uran_ast import Ast
-		precedence = PrecedenceAssigner(tokens)
-		tokens = precedence.assign()
+		precedence = PrecedenceAssigner(token_gen)
+		token_gen = precedence.assign()
 	else:
-		uranium_parser = parser.UraniumParser(tokens)
+		uranium_parser = parser.UraniumParser(token_gen)
 		if Config.check_syntax:
 			uranium_parser.check_syntax(src)
-		tokens = uranium_parser.rearrange()
+		token_gen = uranium_parser.rearrange()
 
 	# generate the final C++ code
-	uranium_compiler = compiler.UraniumCompiler(tokens)
+	uranium_compiler = compiler.UraniumCompiler(token_gen)
 	return uranium_compiler, uranium_compiler.generate_cpp()
 
 def write_output(dest:str, cpp_code:list):

@@ -2,29 +2,29 @@
 <TokenGroup Id="datatypes" Name="Datatypes">
 	<Token Id="int" Name="Int">
 		<Pattern>int</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>int</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="float" Name="Float">
 		<Pattern>float</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>float</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="string" Name="String">
 		<Pattern>string</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>std::string</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="bool" Name="Bool">
 		<Pattern>bool</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>bool</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 </TokenGroup>

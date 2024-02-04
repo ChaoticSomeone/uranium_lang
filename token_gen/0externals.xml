@@ -2,22 +2,22 @@
 <TokenGroup Id="externals" Name="Externals">
     <Token Id="void" Name="Void">
     		<Pattern>""</Pattern>
-    		<Translatons>
+    		<Translations>
     			<CPP>void</CPP>
-    		</Translatons>
+    		</Translations>
     </Token>
 
-	<Token Id="expr" Name="Expression">
+	<Token Id="ex_expr" Name="Expression">
 			<Pattern>""</Pattern>
-			<Translatons>
+			<Translations>
 				<CPP>""</CPP>
-			</Translatons>
+			</Translations>
 	</Token>
 
 	<Token Id="semicolon" Name="Semicolon">
 			<Pattern>""</Pattern>
-			<Translatons>
+			<Translations>
 				<CPP>;</CPP>
-			</Translatons>
+			</Translations>
 	</Token>
 </TokenGroup>

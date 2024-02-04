@@ -2,71 +2,71 @@
 <TokenGroup Id="keywords" Name="Keywords">
 	<Token Id="func" Name="Function">
 		<Pattern>func</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>""</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="return" Name="Return">
 		<Pattern>return</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>return</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="import" Name="Import">
 		<Pattern>import</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>#include</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="if" Name="If">
 		<Pattern>if</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>if</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="else_if" Name="Else If">
 		<Pattern>else if</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>else if</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="else" Name="Else">
 		<Pattern>else</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>else</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="while" Name="While">
 		<Pattern>while</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>while</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="for" Name="For">
 		<Pattern>for</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>for</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="true" Name="True">
 		<Pattern>true</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>true</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="false" Name="False">
 		<Pattern>false</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>false</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 </TokenGroup>

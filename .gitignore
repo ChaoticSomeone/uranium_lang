@@ -7,12 +7,13 @@
 **/*.exe
 /grammer.md
 git_repo/
-tokens.txt
-template.cpp
+tokens_log.txt
 _out/
 _in/
 src/builtins/main.cpp
-
+grammer.bnf
+# hide all tests
+tests/
 
 # hide the unfinished parser stuff
 src/parser/

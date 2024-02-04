@@ -2,15 +2,15 @@
 <TokenGroup Id="misc" Name="Misc">
 	<Token Id="newline" Name="Newline">
 		<Pattern>\n</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>""</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 
 	<Token Id="std_uranium" Name="uranium std">
 		<Pattern>uranium</Pattern>
-		<Translatons>
+		<Translations>
 			<CPP>""</CPP>
-		</Translatons>
+		</Translations>
 	</Token>
 </TokenGroup>

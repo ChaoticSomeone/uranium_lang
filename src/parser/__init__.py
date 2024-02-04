@@ -1,5 +1,7 @@
+from token_gen import tokens as TokenGroups
+
 from src import errors
-from src.lexer.tokens import Token, TokensEnum
+from src.lexer.tokens import Token, TokenTemplate
 from src.config import Config
 import re
 
@@ -17,133 +19,116 @@ class UraniumParser:
 	def peek(self, i:int, offset:int) -> Token:
 		"""
 		Probably never used this in the codebase, a shame.
-		Anyway, looks ahead in the tokens list
+		Anyway, looks ahead in the token_gen list
 		"""
 		return self.tokens[i + offset] if i + offset < len(self.tokens) else None
 
 	def rearrange(self) -> list:
 		"""
 		I would rather not explain this method.
-		It rearranges the tokens to make the transition to C++ easier, besides that I expect you
+		It rearranges the token_gen to make the transition to C++ easier, besides that I expect you
 		to ignore the wizardry performed here.
 		"""
 		i = 0
-
 		while i < len(self.tokens):
-			match self.tokens[i]:
-				# rearrange and discard tokens for function definitions to make them fit with C++ syntax
-				case TokensEnum.KW_FUNC:
-					if self.tokens[i + 1] == TokensEnum.IDENTIFIER and self.tokens[i + 2] == TokensEnum.SYM_L_PAREN:
-						j = 2
-						while self.tokens[i + j] != TokensEnum.SYM_R_PAREN:
-							if self.tokens[i + j] in TokensEnum.TYPES:
-								self.tokens[i + j], self.tokens[i + j - 2] = self.tokens[i + j - 2], self.tokens[i + j]
-							j += 1
-
-						offset:int = j
-						if self.tokens[i + j + 1] == TokensEnum.SYM_RET_TYPE and self.tokens[i + j + 2] in TokensEnum.TYPES:
-							datatype:Token = self.tokens.pop(i + j + 2)
-							self.tokens.pop(i + j + 1)
-							while self.tokens[i + j] != TokensEnum.KW_FUNC:
-								j -= 1
-							self.tokens[i + j] = datatype
-
-
-						elif self.tokens[i + j + 1] == TokensEnum.SYM_L_CURLY_BRACKET:
-							datatype:Token = TokensEnum.EXTERNAL_VOID
-							while self.tokens[i + j] != TokensEnum.KW_FUNC:
-								j -= 1
-							self.tokens[i + j] = datatype
-
-						i += offset
-
-				# rearrange and discard tokens for variable assignment to make them fit with C++ syntax
-				case TokensEnum.SYM_EQUALS:
-					if self.tokens[i - 1] in TokensEnum.TYPES and self.tokens[i - 2] == TokensEnum.SYM_TYPE and self.tokens[i - 3] == TokensEnum.IDENTIFIER:
-						self.tokens.insert(i - 3, self.tokens.pop(i - 1))
-						self.tokens.pop(i - 1)
-
-				# fix imports
-				case TokensEnum.STD_IDENTIFIER:
-					if self.tokens[i - 1] == TokensEnum.SYM_NAMESPACE_DELIMITER and self.tokens[i - 2] == TokensEnum.STD_URANIUM and self.tokens[i - 3] == TokensEnum.KW_IMPORT:
-						self.tokens[i].meta[0] = f"\"{Config.std_lib_path}/{self.tokens[i].meta[0]}.h\""
-						self.tokens.pop(i - 1)
-						self.tokens.pop(i - 2)
-						i -= 1
-
-					elif self.tokens[i - 1] == TokensEnum.SYM_NAMESPACE_DELIMITER and self.tokens[i - 2] == TokensEnum.STD_URANIUM:
-						self.tokens[i].meta[0] = f"uranium::{re.search(r"\w*", self.tokens[i].meta[0]).group()}"
-						self.tokens.pop(i - 1)
-						self.tokens.pop(i - 2)
-						i -= 1
-
-				# fix if statements
-				case TokensEnum.KW_IF:
-					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
-					j = 0
-					while self.tokens[i + j] != TokensEnum.NEWLINE:
-						j += 1
-					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
-
-				case TokensEnum.KW_ELSE_IF:
-					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
-					j = 0
-					while self.tokens[i + j] != TokensEnum.NEWLINE:
-						j += 1
-					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
-
-				case TokensEnum.KW_WHILE:
-					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
-					j = 0
-					while self.tokens[i + j] != TokensEnum.NEWLINE:
-						j += 1
-					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
-
-				case TokensEnum.KW_FOR:
-					# @ToDo
-					self.tokens.insert(i + 1, Token(TokensEnum.SYM_L_PAREN))
-					j = 0
-					while self.tokens[i + j] != TokensEnum.NEWLINE:
-						j += 1
-					self.tokens.insert(i + j - 1, Token(TokensEnum.SYM_R_PAREN))
-
-					j = 0
-					commas:int = 0
-					iterator:Token = None
-					while self.tokens[i + j] != TokensEnum.SYM_R_PAREN:
-						if commas == 0 and self.tokens[i + j] == TokensEnum.IDENTIFIER:
-							iterator = self.tokens[i + j]
-						if commas == 2:
-							meta:str = self.tokens[i + j].meta
-							self.tokens[i + j] = Token(TokensEnum.EXTERNAL_EXPR)
-							self.tokens[i + j].meta = [f"{iterator.meta[0]} += {meta[0]}"]
-
-						if self.tokens[i + j] == TokensEnum.SYM_COMMA:
-							self.tokens[i + j] = Token(TokensEnum.EXTERNAL_SEMICOLON)
-							commas += 1
+			tok:Token = self.tokens[i]
+			# rearrange and discard token_gen for function definitions to make them fit with C++ syntax
+			if tok == TokenGroups.token_group_all.get("func"):
+				if self.tokens[i + 1] == TokenGroups.token_group_all.get("identifiers") and self.tokens[i + 2] == TokenGroups.token_group_all.get("l_paren"):
+					j = 2
+					while self.tokens[i + j] != TokenGroups.token_group_all.get("r_paren"):
+						if self.tokens[i + j] in TokenGroups.u_token_group_datatypes:
+							self.tokens[i + j], self.tokens[i + j - 2] = self.tokens[i + j - 2], self.tokens[i + j]
 						j += 1
 
-				case TokensEnum.NEWLINE:
-					if self.tokens[i - 1] == TokensEnum.NEWLINE:
-						self.tokens.pop(i)
-						i -= 1
+					offset: int = j
+					if self.tokens[i + j + 1] == TokenGroups.token_group_all.get("ret_type") and self.tokens[i + j + 2] in TokenGroups.u_token_group_datatypes:
+						datatype: Token = self.tokens.pop(i + j + 2)
+						self.tokens.pop(i + j + 1)
+						while self.tokens[i + j] != TokenGroups.token_group_all.get("func"):
+							j -= 1
+						self.tokens[i + j] = datatype
 
-			for composite in TokensEnum.composites2:
 
-				if self.tokens[i] == composite[0] and self.tokens[i + 1] == composite[1]:
-					match composite:
-						case TokensEnum.OP_EQUALS_COMP:
-							self.tokens[i] = TokensEnum.OP_EQUALS
-							self.tokens.pop(i + 1)
-						case TokensEnum.OP_LESS_EQUALS_COMP:
-							self.tokens[i] = TokensEnum.OP_LESS_EQUALS
-							self.tokens.pop(i + 1)
-						case TokensEnum.OP_GREATER_EQUALS_COMP:
-							self.tokens[i] = TokensEnum.OP_GREATER_EQUALS
-							self.tokens.pop(i + 1)
-						case TokensEnum.OP_NOT_EQUAL_COMP:
-							self.tokens[i] = TokensEnum.OP_NOT_EQUAL
-							self.tokens.pop(i + 1)
+					elif self.tokens[i + j + 1] == TokenGroups.token_group_all.get("l_curly"):
+						datatype: Token = TokenGroups.token_group_all.get("void")
+						while self.tokens[i + j] != TokenGroups.token_group_all.get("func"):
+							j -= 1
+						self.tokens[i + j] = datatype
+
+					i += offset
+
+			# rearrange and discard token_gen for variable assignment to make them fit with C++ syntax
+			elif tok == TokenGroups.token_group_all.get("equals"):
+				if self.tokens[i - 1] in TokenGroups.u_token_group_datatypes and self.tokens[i - 2] == TokenGroups.token_group_all.get("type") and self.tokens[i - 3] == TokenGroups.token_group_all.get("identifiers"):
+					self.tokens.insert(i - 3, self.tokens.pop(i - 1))
+					self.tokens.pop(i - 1)
+
+			# fix imports
+			elif tok == TokenGroups.token_group_all.get("std_identifier"):
+				if self.tokens[i - 1] == TokenGroups.token_group_all.get("namespace_delimiter") and self.tokens[i - 2] == TokenGroups.token_group_all.get("std_uranium") and self.tokens[i - 3] == TokenGroups.token_group_all.get("import"):
+					self.tokens[i].meta[0] = f"\"{Config.std_lib_path}/{self.tokens[i].meta[0]}.h\""
+					self.tokens.pop(i - 1)
+					self.tokens.pop(i - 2)
+					i -= 1
+
+				elif self.tokens[i - 1] == TokenGroups.token_group_all.get("namespace_delimiter") and self.tokens[i - 2] == TokenGroups.token_group_all.get("std_uranium"):
+					self.tokens[i].meta[0] = f"uranium::{re.search(r"\w*", self.tokens[i].meta[0]).group()}"
+					self.tokens.pop(i - 1)
+					self.tokens.pop(i - 2)
+					i -= 1
+
+			# fix if statements
+			elif tok == TokenGroups.token_group_all.get("if"):
+				self.tokens.insert(i + 1, Token(TokenGroups.token_group_all.get("l_paren")))
+				j = 0
+				while self.tokens[i + j] != TokenGroups.token_group_all.get("newline"):
+					j += 1
+				self.tokens.insert(i + j - 1, Token(TokenGroups.token_group_all.get("r_paren")))
+
+			elif tok == TokenGroups.token_group_all.get("else_if"):
+				self.tokens.insert(i + 1, Token(TokenGroups.token_group_all.get("l_paren")))
+				j = 0
+				while self.tokens[i + j] != TokenGroups.token_group_all.get("newline"):
+					j += 1
+				self.tokens.insert(i + j - 1, Token(TokenGroups.token_group_all.get("r_paren")))
+
+			elif tok == TokenGroups.token_group_all.get("while"):
+				self.tokens.insert(i + 1, Token(TokenGroups.token_group_all.get("l_paren")))
+				j = 0
+				while self.tokens[i + j] != TokenGroups.token_group_all.get("newline"):
+					j += 1
+				self.tokens.insert(i + j - 1, Token(TokenGroups.token_group_all.get("r_paren")))
+
+			elif tok == TokenGroups.token_group_all.get("for"):
+				# @ToDo
+				self.tokens.insert(i + 1, Token(TokenGroups.token_group_all.get("l_paren")))
+				j = 0
+				while self.tokens[i + j] != TokenGroups.token_group_all.get("newline"):
+					j += 1
+				self.tokens.insert(i + j - 1, Token(TokenGroups.token_group_all.get("r_paren")))
+
+				j = 0
+				commas: int = 0
+				iterator: Token | None = None
+				while self.tokens[i + j] != TokenGroups.token_group_all.get("r_paren"):
+					if commas == 0 and self.tokens[i + j] == TokenGroups.token_group_all.get("identifiers"):
+						iterator = self.tokens[i + j]
+					if commas == 2:
+						meta: str = self.tokens[i + j].meta
+						self.tokens[i + j] = Token(TokenGroups.token_group_all.get("ex_expr"))
+						self.tokens[i + j].meta = [f"{iterator.meta[0]} += {meta[0]}"]
+
+					if self.tokens[i + j] == TokenGroups.token_group_all.get("comma"):
+						self.tokens[i + j] = Token(TokenGroups.token_group_all.get("semicolon"))
+						commas += 1
+					j += 1
+
+
+			elif tok == TokenGroups.token_group_all.get("newline"):
+				if self.tokens[i - 1] == TokenGroups.token_group_all.get("newline"):
+					self.tokens.pop(i)
+					i -= 1
 
 			i += 1
 
@@ -158,10 +143,11 @@ class UraniumParser:
 		I know, I know that I should get this fixed, but I have my
 		priorities else where
 		"""
-		if Config.write_tokens:
-			with open("tokens.txt", "w") as f:
-				f.write("\n".join(map(lambda tok: str(tok), self.tokens)))
 
+		if Config.write_tokens:
+			with open("tokens_log.txt", "w") as f:
+				f.write("\n".join(map(lambda tok: str(tok), self.tokens)))
+		'''
 		parenthese:dict = {
 			"L_PAREN": 0,
 			"R_PAREN": 0,
@@ -174,34 +160,32 @@ class UraniumParser:
 		while i < len(self.tokens):
 			token = self.tokens[i]
 			match token:
-				case TokensEnum.NEWLINE:
+				case TokenGroups.token_group_all.get("newling"):
 					line += 1
 
-				case TokensEnum.KW_FUNC:
-					if self.peek(i, 1) != TokensEnum.IDENTIFIER:
+				case TokenGroups.token_group_all.get("func"):
+					if self.peek(i, 1) != TokenGroups.token_group_all.get("identifiers"):
 						raise errors.UraniumSyntaxError(f"Expected identifier after keyword 'func' in line {line} of file '{src_path}'")
 
-				case TokensEnum.IDENTIFIER:
+				case TokenGroups.token_group_all.get("identifiers"):
 					# implement error checks
 					pass
-					#if self.peek(i, 1) not in [TokensEnum.SYM_TYPE, TokensEnum.SYM_L_PAREN, TokensEnum.NEWLINE]:
-					#	raise errors.UraniumSyntaxError(f"Expected '(' or ':' after identifier '{token.meta[0]}' in line {line} of file '{src_path}'")
 
-				case TokensEnum.SYM_TYPE:
-					if self.peek(i, 1) not in TokensEnum.TYPES:
+				case TokenGroups.token_group_all.get("type"):
+					if self.peek(i, 1) not in TokenGroups.u_token_group_datatypes:
 						raise errors.UraniumSyntaxError(f"Expected datatype after type delimiter ':' in line {line} of file '{src_path}'")
 
-				case TokensEnum.SYM_L_PAREN: parenthese["L_PAREN"] += 1
-				case TokensEnum.SYM_R_PAREN: parenthese["R_PAREN"] += 1
-				case TokensEnum.SYM_L_CURLY_BRACKET: parenthese["L_CURLY"] += 1
-				case TokensEnum.SYM_R_CURLY_BRACKET: parenthese["R_CURLY"] += 1
+				case TokenGroups.token_group_all.get("l_paren"): parenthese["L_PAREN"] += 1
+				case TokenGroups.token_group_all.get("r_paren"): parenthese["R_PAREN"] += 1
+				case TokenGroups.token_group_all.get("l_curly"): parenthese["L_CURLY"] += 1
+				case TokenGroups.token_group_all.get("r_curly"): parenthese["R_CURLY"] += 1
 
-				case TokensEnum.SYM_RET_TYPE:
-					if self.peek(i, 1) not in TokensEnum.TYPES:
+				case TokenGroups.token_group_all.get("ret_type"):
+					if self.peek(i, 1) not in TokenGroups.u_token_group_datatypes:
 						raise errors.UraniumSyntaxError(f"Expected datatype after return type specifier '->' in line {line} of file '{src_path}'")
 
-				case TokensEnum.SYM_EQUALS:
-					if self.peek(i, 1) not in TokensEnum.LITERALS and self.peek(i, 1) not in [TokensEnum.STD_URANIUM, TokensEnum.IDENTIFIER, TokensEnum.KW_TRUE, TokensEnum.KW_FALSE, TokensEnum.SYM_PLUS, TokensEnum.SYM_MINUS, TokensEnum.SYM_L_PAREN, TokensEnum.SYM_EQUALS]:
+				case TokenGroups.token_group_all.get("equals"):
+					if self.peek(i, 1) not in TokenGroups.u_token_group_literals and self.peek(i, 1) not in [TokensEnum.STD_URANIUM, TokensEnum.IDENTIFIER, TokensEnum.KW_TRUE, TokensEnum.KW_FALSE, TokensEnum.SYM_PLUS, TokensEnum.SYM_MINUS, TokensEnum.SYM_L_PAREN, TokensEnum.SYM_EQUALS]:
 						raise errors.UraniumSyntaxError(f"Expected identifier or literal after '=' in line {line} of file '{src_path}'")
 
 				case TokensEnum.STD_URANIUM:
@@ -231,9 +215,9 @@ class UraniumParser:
 
 			i += 1
 
+		'''
+		#if parenthese["L_PAREN"] != parenthese["R_PAREN"]:
+		#	raise errors.UraniumSyntaxError(f"Unmatched '(' and ')' in file '{src_path}'")
 
-		if parenthese["L_PAREN"] != parenthese["R_PAREN"]:
-			raise errors.UraniumSyntaxError(f"Unmatched '(' and ')' in file '{src_path}'")
-
-		if parenthese["L_CURLY"] != parenthese["R_CURLY"]:
-			raise errors.UraniumSyntaxError(f"Unmatched '{{' and '}}' in file '{src_path}'")
+		#if parenthese["L_CURLY"] != parenthese["R_CURLY"]:
+		#	raise errors.UraniumSyntaxError(f"Unmatched '{{' and '}}' in file '{src_path}'")

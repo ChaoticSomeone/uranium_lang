@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TokenGroup Id="identifiers" Name="Identifiers">
+    <Token Id="identifiers" Name="Identifier">
+    		<Pattern>[a-zA-Z_]\w*</Pattern>
+    		<Translations>
+    			<CPP>""</CPP>
+    		</Translations>
+    </Token>
+
+	<Token Id="std_identifier" Name="Uranium STD Identifier">
+			<Pattern>""</Pattern>
+			<Translations>
+				<CPP>""</CPP>
+			</Translations>
+	</Token>
+</TokenGroup>

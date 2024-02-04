@@ -1,20 +1,26 @@
-
-CODE DOCUMENTATION (COMMENTS)
-
 Features:
 	- shorthand assignments
+
+XML:
+/
+
+Optimizations:
+	- Make all code that uses the generated tokens use specified toke groups instead of the one that contains all tokens
 
 Lexer:
 /
 
 Parser:
 	- currently rewriting the entire parser
+	(- fix that shit)
 
-	(- basic syntax checker)
 	- syntax checking for literals
 	- syntax checking for identifiers
 
 Compiler:
+/
+
+Builtins:
 	(the below three fixes have to do with templates/generics)
 	- fix uranium::io.read
 	- fix uranium::random.randint

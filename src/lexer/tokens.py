@@ -1,47 +1,38 @@
 from src.config import Config
+from src import errors
 
-class _Token:
-	"""
-	This class helps us with creating the actual tokens.
-	_Token instances are essentially templates for the real tokens
-	"""
-	next_id:int = 0
-
-	def __init__(self, pattern:str, cpp_translate:str, name:str="", has_pattern:bool=True):
+class TokenTemplate:
+	def __init__(self, pattern: str, cpp_translate: str, name: str = "", _id: str = ""):
 		self.pattern = pattern
 		self.cpp_translate = cpp_translate
-		self.name = pattern if name == "" else name
-		self.id = _Token.next_id
-		self.has_pattern = has_pattern
-		_Token.next_id += 1
+		self.name = name if name else pattern
+		self.id = _id
 
 	def __eq__(self, other):
-		if isinstance(other, _Token):
+		if isinstance(other, TokenTemplate):
 			return self.id == other.id
-		elif  isinstance(other, Token):
+		elif isinstance(other, Token):
 			return self.id == other.token.id
 
 	def __str__(self):
-		return f"Token('{self.name}')"
+		return f"_Token('{self.name}')"
 
 	def __repr__(self):
-		return f"Token('{self.name}')"
+		return f"_Token('{self.name}')"
+
+	def show_as_py(self):
+		return f"TokenTemplate(pattern=r'{self.pattern}', cpp_translate='{self.cpp_translate}', name='{self.name}', _id='{self.id}')"
 
 
 class Token:
-	"""
-	This class represents a token, it contains the template (_Token) it inherited from,
-	a list of metadata and a precedence level
-	"""
-	def __init__(self, parent:_Token,  meta:list=[], precedence:int=-1):
+	def __init__(self, parent:TokenTemplate, meta: list = []):
 		self.token = parent
 		self.meta = meta
-		self.precedence = precedence
 
 	def __eq__(self, other):
-		if isinstance(other, _Token):
+		if isinstance(other, TokenTemplate):
 			return self.token.id == other.id
-		elif  isinstance(other, Token):
+		elif isinstance(other, Token):
 			return self.token.id == other.token.id
 
 	def __str__(self):
@@ -51,144 +42,51 @@ class Token:
 		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
 
-class _TokenGroup:
-	"""
-	Allows the grouping of similar tokens (_Token) and
-	generally saved me a ton of typing.
-	Thank me for the readability this brought.
-	"""
-	def __init__(self, start:_Token, end:_Token):
-		self.start = start.id
-		self.end = end.id
+class TokenGroup:
+
+	def __init__(self, tokens: list, g_name: str = "", g_id: str = ""):
+		self.tokens = tokens
+		self.name = g_name
+		self.id = g_id
+
+		self.__idx = 0
+
+	def __repr__(self):
+		return f"TokenGroup({self.tokens})"
+
+	def __str__(self):
+		return f"TokenGroup({self.tokens})"
 
 	def __contains__(self, item):
-		if isinstance(item, _Token):
-			return self.start <= item.id <= self.end
+		if isinstance(item, TokenTemplate):
+			return item in self.tokens
 		elif isinstance(item, Token):
-			return self.start <= item.token.id <= self.end
+			return item.token in self.tokens
 
-	def get_all(self) -> range:
-		return range(self.start, self.end + 1)
+	def __add__(self, other):
+		if not isinstance(other, TokenGroup):
+			raise errors.UraniumTokenError(f"Cannot add type 'TokenGroup' and {type(other)}")
 
+		return TokenGroup([*self.tokens, *other.tokens])
 
-class TokensEnum:
-	"""
-	This monstrosity of a class should be used only as an enumeration.
-	It contains every single token, several token groups,...
-	Please do not diverge from intended usage, Python doesn't support proper enums
-	"""
-	# misc
-	NEWLINE = _Token(r"\n", "","newline")
+	def __iter__(self):
+		return self
 
-	STD_URANIUM = _Token(r"uranium", "", "uranium std")
+	def __next__(self):
+		if self.__idx < len(self.tokens):
+			result:Token = self.tokens[self.__idx]
+			self.__idx += 1
+			return result
+		else:
+			self.__idx = 0
+			raise StopIteration
 
-	# keywords
-	KW_FUNC = _Token(r"func", "")
-	KW_RETURN = _Token(r"return", "return")
-	KW_IMPORT = _Token(r"import", "#include")
-	KW_IF = _Token(r"if", "if")
-	KW_ELSE_IF = _Token("else if", "else if")
-	KW_ELSE = _Token(r"else", "else")
-	KW_WHILE = _Token(r"while", "while")
-	KW_FOR = _Token(r"for", "for")
-	KW_TRUE = _Token(r"true", "true")
-	KW_FALSE = _Token(r"false", "false")
+	def show_as_py(self):
+		return "TokenGroup([" + (",".join(map(lambda x: x.show_as_py(), self.tokens))) + f"], g_name = '{self.name}', g_id = '{self.id}')"
 
-	KEYWORDS = _TokenGroup(KW_FUNC, KW_FALSE)
+	def get(self, id_:str) -> None|TokenTemplate:
+		mapped_tokens:list = list(map(lambda tok: tok.id, self.tokens))
+		if id_ not in mapped_tokens:
+			return None
 
-	# datatypes and datatype keywords
-	TYPE_INT = _Token(r"int", "int")
-	TYPE_FLOAT = _Token(r"float", "float")
-	TYPE_STRING = _Token(r"string", "std::string")
-	TYPE_BOOL = _Token(r"bool", "bool")
-
-	TYPES = _TokenGroup(TYPE_INT, TYPE_BOOL)
-
-	# literals
-	LIT_FLOAT = _Token(r"\d*\.\d+", "", "float literal")
-	LIT_INT = _Token(r"\d+", "", "int literal")
-	LIT_STRING = _Token(r"\".*\"", "", "string literal")
-
-	LITERALS = _TokenGroup(LIT_FLOAT, LIT_STRING)
-
-	# symbols
-	SYM_L_PAREN = _Token(r"\(", "(", "(")
-	SYM_R_PAREN = _Token(r"\)", ")", ")")
-	SYM_L_CURLY_BRACKET = _Token(r"\{", "{", "{")
-	SYM_R_CURLY_BRACKET = _Token(r"\}", "}", "}")
-	SYM_NAMESPACE_DELIMITER = _Token(r"::", "/", "namespace delimiter")
-	SYM_COMMA = _Token(r",", ",", "comma")
-	SYM_DOT = _Token(r"\.", "::", "dot")
-	SYM_L_ANGLE = _Token(r"<", "<")
-	SYM_R_ANGLE = _Token(r">", ">")
-	SYM_EXCLAMATION = _Token(r"!", "!")
-	SYM_RET_TYPE = _Token(r"->", "")									# ignored by the compiler
-	SYM_TYPE = _Token(r":", "", "type delimiter")			# ignored by the compiler
-	SYM_PLUS = _Token(r"\+", "+", "plus")
-	SYM_MINUS = _Token(r"-", "-", "minus")
-	SYM_ASTERISK = _Token(r"\*", "*", "asterisk")
-	SYM_SLASH = _Token(r"/", "/", "slash")
-	SYM_PERCENT = _Token(r"%", "%", "modulo")
-	SYM_EQUALS = _Token(r"=", "=", "equals")
-
-	SYMBOLS = _TokenGroup(SYM_L_PAREN, SYM_EQUALS)
-
-	# not part of Uranium
-	EXTERNAL_VOID = _Token(r"void", "void", "void", False)
-	EXTERNAL_EXPR = _Token("", "", "External Statement", False)
-	EXTERNAL_SEMICOLON = _Token(r";", ";", "Semicolon", False)
-
-	EXTERNALS = _TokenGroup(EXTERNAL_VOID, EXTERNAL_SEMICOLON)
-
-	# composite operators (2 characters)
-	OP_EQUALS = _Token("", "==", "logical equals", False)
-	OP_EQUALS_COMP = [SYM_EQUALS, SYM_EQUALS]
-
-	OP_LESS_EQUALS = _Token("", "<=", "less equals", False)
-	OP_LESS_EQUALS_COMP = [SYM_L_ANGLE, SYM_EQUALS]
-
-	OP_GREATER_EQUALS = _Token("", "<=", "less equals", False)
-	OP_GREATER_EQUALS_COMP = [SYM_R_ANGLE, SYM_EQUALS]
-
-	OP_NOT_EQUAL = _Token("", "!=", "not equal", False)
-	OP_NOT_EQUAL_COMP = [SYM_EXCLAMATION, SYM_EQUALS]
-
-	composites2 = [
-		OP_EQUALS_COMP,
-		OP_LESS_EQUALS_COMP,
-		OP_GREATER_EQUALS_COMP,
-		OP_NOT_EQUAL_COMP
-	]
-
-	COMPARISONS = [
-		OP_EQUALS,
-		OP_NOT_EQUAL,
-		OP_GREATER_EQUALS,
-		OP_LESS_EQUALS,
-		SYM_L_ANGLE,
-		SYM_R_PAREN
-	]
-
-	# other misc
-	IDENTIFIER = _Token(r"[a-zA-Z_]\w*", "", "identifier")
-	STD_IDENTIFIER = _Token("", "", "uranium std identifier", False)
-
-	# literally all tokens from above
-	ALL_TOKENS = []
-
-
-	@staticmethod
-	def load_tokens():
-		TokensEnum.ALL_TOKENS = list(filter(lambda x: isinstance(x, _Token) and x.has_pattern, TokensEnum.__dict__.values()))
-
-
-
-def print_token_list(tokens:list, end:str="\n") -> None:
-	"""
-	@ToDo
-	This will be deleted sooner or later
-	"""
-	if not Config.ignore_debug_output:
-		for token in tokens:
-			print(token)
-		print(end)
+		return self.tokens[mapped_tokens.index(id_)]

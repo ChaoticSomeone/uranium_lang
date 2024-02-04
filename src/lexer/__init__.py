@@ -1,5 +1,5 @@
 import re
-
+from token_gen import tokens as TokenGroups
 from src import errors
 from src.lexer.tokens import *
 from src.builtins import BuiltIns
@@ -22,7 +22,7 @@ class UraniumLexer:
 	def tokenize(self) -> list:
 		"""
 		This method is able to tokenize the source code autonomous.
-		Additional tokens should not require changes to this method
+		Additional token_gen should not require changes to this method
 		"""
 		all_tokens = []
 
@@ -44,37 +44,49 @@ class UraniumLexer:
 					line_idx += len(comment.group())
 					remaining = line[line_idx:]
 
+
 				# generate appropriate tokens and add metadata if needed
-				for tok in TokensEnum.ALL_TOKENS:
+				i = 0
+				while i < len(TokenGroups.token_group_all.tokens) and remaining:
+					tok:TokenTemplate = TokenGroups.token_group_all.tokens[i]
+
+					# obviously ignore all tokens without a pattern
+					if not tok.pattern:
+						i += 1
+						continue
 					# check if the current token matches
-					if (token_match := re.match(tok.pattern, remaining)) is not None:
+					if (token_match := re.match("\n" if tok.pattern == r"\n" else fr"{tok.pattern}", remaining)) is not None:
+						is_valid = True
 						# setting up token properties
 						meta = [""]
 						group = token_match.group()
-						if tok in TokensEnum.LITERALS or tok == TokensEnum.IDENTIFIER:
+						if tok in TokenGroups.u_token_group_literals or tok == TokenGroups.token_group_all.get("identifiers"):
 							meta[0] = group
 
 						# create the token
-						if tok == TokensEnum.IDENTIFIER and group in BuiltIns.LIBS:
-							token = Token(TokensEnum.STD_IDENTIFIER, meta)
+						if tok == TokenGroups.token_group_all.get("identifiers") and group in BuiltIns.LIBS:
+							token = Token(TokenGroups.token_group_all.get("std_identifier"), meta)
 						else:
 							token = Token(tok, meta)
 
-						# extend the tokens list
+						# extend the token list
 						all_tokens.append(token)
 						line_idx += len(token_match.group())
 						remaining = line[line_idx:]
-						is_valid = True
 						break
+
+					i += 1
 
 				if is_valid: continue
 
 				# make sure the lexer doesn't give a fuck about whitespaces
 				if (whitespace := re.match(r"\s", remaining)) is not None:
 					line_idx += len(whitespace.group())
+					remaining = line[line_idx:]
+					i += 1
 					continue
 
-				# in case unknown tokens are encountered
+				# in case unknown token_gen are encountered
 				errors.UraniumTokenError(
 					f"Encounter unknown token in {self.src_path} at {line_number + 1}:{line_idx + 1}\n" +
 					f"Unknown token: {re.match(r"\S*", remaining).group()}"
