@@ -113,6 +113,14 @@ for i: int = 0, i < 10, 1 {
 # Uranium Lang - How does it work
 
 The Uranium Compiler "runs through" your source code and tokenizes it. The resulting tokens are then
-rearranged and resstructured so that they can be tarnslated to C++ more easily.
+rearranged and resstructured so that they can be translated to C++ more easily.
 Yes, Uranium Lang is not directly compiled to machine code, it gets compiled into C++ and
 relies on an external C++ Compiler to do the rest of the compilation.
+
+## Importance of XML
+
+Uranium Lang depends on various XML files, such as the ones for token generation,
+the new parser also heavily relies on them. The reason for that? Customization!
+Don't like a feature of the language? Just change the right XML file appropriately
+and you can tailor it to your liking! Is this feature a good idea? Probably not,
+but it stays nevertheless.
