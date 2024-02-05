@@ -3,7 +3,7 @@ from src.config import Config
 from src.formatter import Formatter
 from src.debug_logging import Logger
 from src.errors import UraniumError
-from token_gen.xml_parser import XmlParser
+from token_gen.xml_parser import XmlTokenParser
 import os
 
 
@@ -11,7 +11,7 @@ def init():
 	# load all the options from config.toml
 	Config.read_config()
 	# load the tokens
-	XmlParser.generate("u")
+	XmlTokenParser.generate("u")
 	# init. the tokens and logger
 	Logger.init()
 
@@ -63,7 +63,21 @@ if __name__ == '__main__':
 	src_path = "./_in/main.uran"
 
 	if Config.new_parser:
-		from src.parser.uran_ast import UraniumParser
+		from src.parser.new_parser import NewerUraniumParser
+
+		# generate a list of tokens from the source code
+		uranium_lexer = lexer.UraniumLexer(src_path)
+		tokens = uranium_lexer.tokenize()
+
+		if Config.write_tokens:
+			with open("tokens_log.txt", "w") as f:
+				f.write("\n".join(map(lambda tok: str(tok), tokens)))
+
+		# parsing time baby
+		new_parser:NewerUraniumParser = NewerUraniumParser(tokens, src_path)
+		new_parser.check_syntax()
+
+
 	else:
 		uranium_compiler, cpp = compile(src_path)
 		Logger.timestamp("Compilation took")

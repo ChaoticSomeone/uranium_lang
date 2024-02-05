@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<TokenGroup Id="identifiers" Name="Identifiers">
+<TokenGroup Id="identifiers_g" Name="Identifiers">
     <Token Id="identifiers" Name="Identifier">
     		<Pattern>[a-zA-Z_]\w*</Pattern>
     		<Translations>

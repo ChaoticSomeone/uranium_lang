@@ -16,7 +16,7 @@
 					 Description="URANIUM_PATH is an environemnt variable that helps the compiler to find the location of its components">
 				<ComponentGroupRef Id="EnvComponents"/>
 			</Feature>
-			
+	
 		</FeatureGroup>
 	</Fragment>
 </Wix>

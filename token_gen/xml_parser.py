@@ -4,7 +4,7 @@ import xmltodict
 from src.errors import UraniumXmlParseError
 from src.lexer.tokens import TokenGroup, Token, TokenTemplate
 
-class XmlParser:
+class XmlTokenParser:
 
 	@staticmethod
 	def read_xml() -> dict:
@@ -49,10 +49,10 @@ class XmlParser:
 
 		for tok in tokens:
 			new_token: TokenTemplate = TokenTemplate(
-				pattern = XmlParser.get_token_property(tok, "Pattern"),
-				cpp_translate = XmlParser.get_token_property(tok.get("Translations"), "CPP"),
-				name = XmlParser.get_token_property(tok, "@Name"),
-				_id = XmlParser.get_token_property(tok, "@Id")
+				pattern = XmlTokenParser.get_token_property(tok, "Pattern"),
+				cpp_translate = XmlTokenParser.get_token_property(tok.get("Translations"), "CPP"),
+				name = XmlTokenParser.get_token_property(tok, "@Name"),
+				_id = XmlTokenParser.get_token_property(tok, "@Id")
 			)
 			tokens_of_group.append(new_token)
 
@@ -62,13 +62,13 @@ class XmlParser:
 	@staticmethod
 	def generate(xml_type:Literal["u", "x"]):
 		# read the xml file and turn it into a dict
-		token_xml:dict = XmlParser.read_xml()
+		token_xml:dict = XmlTokenParser.read_xml()
 
 		# store all token_gen and token groups
 		all_tokens:list = []
 		groups:list = []
 		for key in token_xml:
-			group_id, group_name, group_tokens = XmlParser.get_token_group(token_xml, key)
+			group_id, group_name, group_tokens = XmlTokenParser.get_token_group(token_xml, key)
 			groups.append(TokenGroup(group_tokens, group_name, group_id))
 			all_tokens.extend(group_tokens)
 

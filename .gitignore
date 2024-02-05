@@ -12,9 +12,9 @@ _out/
 _in/
 src/builtins/main.cpp
 grammer.bnf
+
 # hide all tests
 tests/
-playground/
 
 # hide the unfinished parser stuff
 src/parser/

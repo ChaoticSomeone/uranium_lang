@@ -43,7 +43,7 @@ class UraniumCompiler:
 			# token_gen which can be expressed by a constant string are handled here
 			else:
 				if isinstance(token, Token):
-					output.append(f"{token.token.cpp_translate}")
+					output.append(f"{token.template.cpp_translate}")
 				elif isinstance(token, TokenTemplate):
 					output.append(f"{token.cpp_translate}")
 

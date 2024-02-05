@@ -13,7 +13,7 @@ class TokenTemplate:
 		if isinstance(other, TokenTemplate):
 			return self.id == other.id
 		elif isinstance(other, Token):
-			return self.id == other.token.id
+			return self.id == other.template.id
 
 	def __str__(self):
 		return f"_Token('{self.name}')"
@@ -27,21 +27,21 @@ class TokenTemplate:
 
 class Token:
 	def __init__(self, parent:TokenTemplate, meta:list=[], position:list[int, int, int]=[0, 0, 0]):
-		self.token = parent
+		self.template:TokenTemplate = parent
 		self.meta = meta
 		self.position = position
 
 	def __eq__(self, other):
 		if isinstance(other, TokenTemplate):
-			return self.token.id == other.id
+			return self.template.id == other.id
 		elif isinstance(other, Token):
-			return self.token.id == other.token.id
+			return self.template.id == other.template.id
 
 	def __str__(self):
-		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
+		return f"Token('{self.template.name}' {self.position}, {f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
 	def __repr__(self):
-		return f"Token('{self.token.name}'{f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
+		return f"Token('{self.template.name}' {self.position}, {f":{self.meta}" if len(self.meta) > 0 and self.meta[0] else ""})"
 
 class TokenJsonEncoder(JSONEncoder):
 	def default(self, o):
@@ -66,7 +66,7 @@ class TokenGroup:
 		if isinstance(item, TokenTemplate):
 			return item in self.tokens
 		elif isinstance(item, Token):
-			return item.token in self.tokens
+			return item.template in self.tokens
 
 	def __add__(self, other):
 		if not isinstance(other, TokenGroup):

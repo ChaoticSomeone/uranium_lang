@@ -1,11 +1,11 @@
 Syntax (+checker (?)):
 	main function (+syntax)
-	return statement (+syntax)
+	return statement [SYNTAX]
 	function declaration & calls (+syntax?)
-	variables, identifiers
+	variables [init: SYNTAX]
 	datatypes and literals (int, floats, bools, strings) (+syntax)
 	arithmetic (+, -, *, /, %)
-	imports (only uranium::std) (+syntax)
+	imports (only uranium::std) [SYNTAX]
 	std libraries: (+syntax?)
 		- io (+syntax?)
 		- random (+syntax?)

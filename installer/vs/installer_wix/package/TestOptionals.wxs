@@ -1,5 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Fragment>
+	  <!--This is temporary-->
 	<ComponentGroup Id="TestOptionals" Directory="INSTALLFOLDER">
 		<Component Id="Test" Guid="{A5924F47-2C15-4C15-A35A-B383425A8237}">
 			<File Source="../../../../config.toml" />

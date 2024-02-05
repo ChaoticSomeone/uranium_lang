@@ -2,20 +2,21 @@ Features:
 	- shorthand assignments
 
 XML:
-/
+	- Allow various kinds of syntax (e.g. function/variable identifier)
+	  alternatively we could introduce another class for tokens
 
 Optimizations:
 	- Make all code that uses the generated tokens use specified toke groups instead of the one that contains all tokens
+	- the new parser should only check relevant syntax for each token, not all syntaxes
 
 Lexer:
 /
 
 Parser:
 	(- currently rewriting the entire parser )
-	(- fix that shit)
-
-	- syntax checking for literals
-	- syntax checking for identifiers
+	- implement all syntax files
+	- recursive syntax checking
+	- type checking
 
 Compiler:
 /
@@ -25,3 +26,6 @@ Builtins:
 	- fix uranium::io.read
 	- fix uranium::random.randint
 	- fix uranium::random.randfloat
+
+Installer:
+	- Move *.xml files to the install dir

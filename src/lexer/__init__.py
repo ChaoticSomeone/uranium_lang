@@ -61,7 +61,7 @@ class UraniumLexer:
 						# setting up token properties
 						meta = [""]
 						group = token_match.group()
-						position:list = [line_number, token_match.start(), token_match.end()]
+						position:list = [line_number + 1, line_idx + 1, line_idx + token_match.end() + 1]
 						if tok in TokenGroups.u_token_group_literals or tok == TokenGroups.token_group_all.get("identifiers"):
 							meta[0] = group
 
@@ -89,9 +89,11 @@ class UraniumLexer:
 					continue
 
 				# in case unknown token_gen are encountered
+				unknown:re.Match = re.match(r"\S*", remaining)
 				errors.UraniumTokenError(
-					f"Encounter unknown token in {self.src_path} at {line_number + 1}:{line_idx + 1}\n" +
-					f"Unknown token: {re.match(r"\S*", remaining).group()}"
+					f"Unknown token: {unknown.group()}",
+					file = self.src_path,
+					position = [line_number + 1, unknown.start(), unknown.end()]
 				)
 
 			line_number += 1
