@@ -5,7 +5,6 @@
 **/.idea/
 **/CMakeLists.txt
 **/*.exe
-/grammer.md
 git_repo/
 tokens_log.txt
 _out/

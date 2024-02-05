@@ -1,5 +1,6 @@
 Features:
 	- shorthand assignments
+	- variable declaration
 
 XML:
 	- Allow various kinds of syntax (e.g. function/variable identifier)

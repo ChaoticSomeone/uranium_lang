@@ -1,21 +1,20 @@
-Syntax (+checker (?)):
-	main function (+syntax)
-	return statement [SYNTAX]
-	function declaration & calls (+syntax?)
-	variables [init: SYNTAX]
-	datatypes and literals (int, floats, bools, strings) (+syntax)
-	arithmetic (+, -, *, /, %)
-	imports (only uranium::std) [SYNTAX]
-	std libraries: (+syntax?)
-		- io (+syntax?)
-		- random (+syntax?)
-	output to stdout "w/ fmt string"
-	logical comparisons (==, <, <=, >, >=, !=)
-	single line comments
-	Control Flow:
-		- if statements
-		- else statements
-		- else if statements
+main function [SYNTAX]
+return statement [SYNTAX]
+function declaration [SYNTAX] & calls
+variables [init: SYNTAX]
+datatypes and literals (int, floats, bools, strings)
+arithmetic (+, -, *, /, %)
+imports (only uranium::std) [SYNTAX]
+std libraries:
+	- io
+	- random
+output to stdout "w/ fmt string"
+logical comparisons (==, <, <=, >, >=, !=)
+single line comments
+Control Flow:
+	- if statements
+	- else statements
+	- else if statements
 
-		- while loops
-		- for loops (WIP)
+	- while loops
+	- for loops (WIP)
